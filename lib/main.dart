@@ -20,7 +20,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
         home: LandingPage(),
       theme: ThemeData(
-        primaryColor:Colors.white,
+        primaryColor:Color(0xff181920),
+        accentColor: Colors.white,
+        backgroundColor: Color(0xff262A3D),
         canvasColor: Color(0xff181920),
         fontFamily: "OpenSans",
         textTheme: TextTheme(
@@ -35,8 +37,15 @@ class MyApp extends StatelessWidget {
             side: BorderSide(width: 1, color: Colors.white),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15)
-            )
+            ),
+            tapTargetSize: MaterialTapTargetSize.padded,
           )
+        ),
+        textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            )
         )
       ),
       routes: {
