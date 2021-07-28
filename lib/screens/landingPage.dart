@@ -8,23 +8,23 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQeury = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.of(context);
     return Scaffold(
       body: Container(
         margin: EdgeInsets.only(
-            top: mediaQeury.size.height / 10,
-            left: mediaQeury.size.width / 10,
-            right: mediaQeury.size.width / 10),
-        height: mediaQeury.size.height,
-        width: mediaQeury.size.width,
+            top: mediaQuery.size.height / 10,
+            left: mediaQuery.size.width / 10,
+            right: mediaQuery.size.width / 10),
+        height: mediaQuery.size.height,
+        width: mediaQuery.size.width,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                height: mediaQeury.size.height / 3,
-                width: mediaQeury.size.height / 3,
+                height: mediaQuery.size.height / 3,
+                width: mediaQuery.size.height / 3,
                 child: Center(
                   child: Image.asset(
                     "assets/images/tree.png",
@@ -77,7 +77,7 @@ class LandingPage extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  width: mediaQeury.size.width / 3,
+                  width: mediaQuery.size.width / 3,
                   padding: EdgeInsets.all(10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
