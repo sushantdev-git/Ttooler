@@ -12,9 +12,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         home: Scaffold(
           body: Center(
-            child: Text("hello"),
+            child: Text("hello how are you"),
+
           ),
         ),
+      routes: {
+
+      },
     );
   }
 }
