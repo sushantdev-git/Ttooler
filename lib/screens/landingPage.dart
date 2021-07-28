@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ttooler/pageRoutebuilder/customPageRouteBuilder.dart';
+import 'package:ttooler/screens/homePage.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -33,7 +35,7 @@ class LandingPage extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              Text(
+              const Text(
                 "Ttooler",
                 style: TextStyle(
                     fontSize: 60,
@@ -43,7 +45,7 @@ class LandingPage extends StatelessWidget {
               SizedBox(
                 height: 40,
               ),
-              Text(
+              const Text(
                 "Welcome",
                 style: TextStyle(
                   fontWeight: FontWeight.w100,
@@ -53,7 +55,7 @@ class LandingPage extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "Ttooler is powerful management app for students.",
                 softWrap: true,
                 style: TextStyle(
@@ -66,7 +68,14 @@ class LandingPage extends StatelessWidget {
                 height: 40,
               ),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    CustomPageRouteBuilder(
+                      child: HomePage(),
+                    ),
+                  );
+                },
                 child: Container(
                   width: mediaQeury.size.width / 3,
                   padding: EdgeInsets.all(10),

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ttooler/screens/landingPage.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  //this will prevent to change orientation of app.
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
+    runApp(new MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -28,6 +33,9 @@ class MyApp extends StatelessWidget {
           style: OutlinedButton.styleFrom(
             primary: Colors.white,
             side: BorderSide(width: 1, color: Colors.white),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15)
+            )
           )
         )
       ),
