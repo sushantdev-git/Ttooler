@@ -12,6 +12,7 @@ class DrawerWidget extends StatelessWidget {
           color: Color(0xff464D65)
         ),
         child: ListView(
+          physics:  ClampingScrollPhysics(), //this will remove the expand scroll to top animation in list view
           children: [
             Container(
               height: 150,
@@ -36,7 +37,7 @@ class DrawerWidget extends StatelessWidget {
             const Divider(height: 20, thickness: 1, color: Colors.white,),
             const DrawerItem(iconAddress: "assets/images/icon_images/home.png", title: "BookShelf"),
             const Divider(height: 20, thickness: 1, color: Colors.white,),
-            const DrawerItem(iconAddress: "assets/images/icon_images/home.png", title: "About"),
+            const DrawerItem(iconAddress: "assets/images/icon_images/mug_.png", title: "About"),
           ],
         )
       )

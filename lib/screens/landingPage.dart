@@ -72,7 +72,8 @@ class LandingPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     CustomPageRouteBuilder(
-                      child: HomePage(),
+                      enterPage: HomePage(),
+                      exitPage: this,
                     ),
                   );
                 },
