@@ -36,49 +36,53 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       _scaffoldKey.currentState!.openDrawer();
                     },
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(10),
+                    highlightColor: Colors.transparent, //this line will remove the highlight color of inkwell
                   ),
                   InfoGreeting(),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   Text("At Glance,"),
                   SizedBox(
                     height: 10,
                   ),
-                  Stack(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 50,
-                                      child: Image.asset(
-                                          "assets/images/icon_images/todo_icon.png"),
-                                    ),
-                                    SizedBox(width: 10,),
-                                    Text(
-                                      "Todo",
-                                      style: TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.w700,
+                  Padding(
+                    padding: EdgeInsets.only(right: 5),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 50,
+                                        child: Image.asset(
+                                            "assets/images/icon_images/todo_icon.png"),
                                       ),
-                                    )
-                                  ],
-                                ),
-                                BorderIconButton(icon: Icons.east, onPress: (){})
-                              ],
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                                      SizedBox(width: 10,),
+                                      Text(
+                                        "Todo",
+                                        style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  BorderIconButton(icon: Icons.east, onPress: (){})
+                                ],
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   )
                 ],
               ),

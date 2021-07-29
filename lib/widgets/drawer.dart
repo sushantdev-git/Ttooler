@@ -58,15 +58,21 @@ class DrawerItem extends StatelessWidget {
       color: Color(0xff262A3D),
       elevation: 6,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: ListTile(
-        leading: Container(
-          height: 40,
-          width: 40,
-          child : Image.asset(iconAddress),
+      child: InkWell(
+        borderRadius:BorderRadius.circular(15),
+        splashColor: Colors.white.withOpacity(0.2),
+        highlightColor: Colors.transparent,
+        onTap: (){},
+        child: ListTile(
+          leading: Container(
+            height: 40,
+            width: 40,
+            child : Image.asset(iconAddress),
+          ),
+          title: Text(title, style: TextStyle(
+            fontSize: 15,
+          ),),
         ),
-        title: Text(title, style: TextStyle(
-          fontSize: 15,
-        ),),
       ),
     );
   }

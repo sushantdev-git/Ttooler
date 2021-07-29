@@ -14,13 +14,19 @@ class InfoGreeting extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Sushant", style: TextStyle(
-                fontSize: 25,
-              ),),
-              Text("Good Morning", style: TextStyle(
-                fontWeight: FontWeight.w100,
-                fontSize: 30,
-              ),),
+              Text(
+                "Sushant",
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              Text(
+                "Good Morning",
+                style: TextStyle(
+                  fontWeight: FontWeight.w100,
+                  fontSize: 30,
+                ),
+              ),
             ],
           ),
           CircleAvatar(
