@@ -29,14 +29,14 @@ class DrawerWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10,),
-            const DrawerItem(icon: Icons.home, title: "Home"),
-            const DrawerItem(icon: Icons.task_alt, title: "Todo"),
-            const DrawerItem(icon: Icons.schedule, title: "Reminder"),
-            const DrawerItem(icon: Icons.date_range, title: "TimeTable"),
+            const DrawerItem(iconAddress: "assets/images/icon_images/home.png", title: "Home"),
+            const DrawerItem(iconAddress: "assets/images/icon_images/todo_icon.png", title: "Todo"),
+            const DrawerItem(iconAddress: "assets/images/icon_images/reminder1.png", title: "Reminder"),
+            const DrawerItem(iconAddress: "assets/images/icon_images/home.png", title: "TimeTable"),
             const Divider(height: 20, thickness: 1, color: Colors.white,),
-            const DrawerItem(icon: Icons.book, title: "BookShelf"),
+            const DrawerItem(iconAddress: "assets/images/icon_images/home.png", title: "BookShelf"),
             const Divider(height: 20, thickness: 1, color: Colors.white,),
-            const DrawerItem(icon: Icons.engineering, title: "About"),
+            const DrawerItem(iconAddress: "assets/images/icon_images/home.png", title: "About"),
           ],
         )
       )
@@ -46,10 +46,10 @@ class DrawerWidget extends StatelessWidget {
 
 class DrawerItem extends StatelessWidget {
 
-  final IconData icon;
+  final String iconAddress;
   final String title;
 
-  const DrawerItem({required this.icon, required this.title});
+  const DrawerItem({required this.iconAddress, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,11 @@ class DrawerItem extends StatelessWidget {
       elevation: 6,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: ListTile(
-        leading: Icon(icon, color: Colors.white,),
+        leading: Container(
+          height: 40,
+          width: 40,
+          child : Image.asset(iconAddress),
+        ),
         title: Text(title, style: TextStyle(
           fontSize: 15,
         ),),
