@@ -15,6 +15,7 @@ class LandingPage extends StatelessWidget {
             top: mediaQuery.size.height / 10,
             left: mediaQuery.size.width / 10,
             right: mediaQuery.size.width / 10),
+
         height: mediaQuery.size.height,
         width: mediaQuery.size.width,
         child: SingleChildScrollView(
