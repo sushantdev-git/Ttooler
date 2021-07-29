@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:ttooler/konstant/konstant.dart';
+import 'package:ttooler/pageRoutebuilder/customPageRouteBuilder.dart';
+import 'package:ttooler/pages/aboutPage.dart';
+import 'package:ttooler/pages/bookshelfPage.dart';
+import 'package:ttooler/pages/homePage.dart';
+import 'package:ttooler/pages/reminderPage.dart';
+import 'package:ttooler/pages/timetablePage.dart';
+import 'package:ttooler/pages/todoPage.dart';
+
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({Key? key}) : super(key: key);
@@ -30,14 +39,14 @@ class DrawerWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10,),
-            const DrawerItem(iconAddress: "assets/images/icon_images/home.png", title: "Home"),
-            const DrawerItem(iconAddress: "assets/images/icon_images/todo_icon.png", title: "Todo"),
-            const DrawerItem(iconAddress: "assets/images/icon_images/reminder1.png", title: "Reminder"),
-            const DrawerItem(iconAddress: "assets/images/icon_images/reminder.png", title: "TimeTable"),
+            const DrawerItem(PageName.HomePage, iconAddress: "assets/images/icon_images/home.png", title: "Home", enterPage: HomePage(),),
+            const DrawerItem(PageName.NotHomePage, iconAddress: "assets/images/icon_images/todo_icon.png", title: "Todo", enterPage: TodoPage(),),
+            const DrawerItem(PageName.NotHomePage, iconAddress: "assets/images/icon_images/reminder1.png", title: "Reminder", enterPage: ReminderPage(),),
+            const DrawerItem(PageName.NotHomePage,iconAddress: "assets/images/icon_images/reminder.png", title: "TimeTable", enterPage: TimetablePage(),),
             const Divider(height: 20, thickness: 1, color: Colors.white,),
-            const DrawerItem(iconAddress: "assets/images/icon_images/bookIcon.png", title: "BookShelf"),
+            const DrawerItem(PageName.NotHomePage,iconAddress: "assets/images/icon_images/bookIcon.png", title: "BookShelf", enterPage: BookshelfPage(),),
             const Divider(height: 20, thickness: 1, color: Colors.white,),
-            const DrawerItem(iconAddress: "assets/images/icon_images/mug_.png", title: "About"),
+            const DrawerItem(PageName.NotHomePage, iconAddress: "assets/images/icon_images/mug_.png", title: "About", enterPage: AboutPage(),),
           ],
         )
       )
@@ -49,8 +58,10 @@ class DrawerItem extends StatelessWidget {
 
   final String iconAddress;
   final String title;
+  final Widget enterPage;
+  final PageName ? page;
 
-  const DrawerItem({required this.iconAddress, required this.title});
+  const DrawerItem(this.page, {required this.iconAddress, required this.title, required this.enterPage});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +73,13 @@ class DrawerItem extends StatelessWidget {
         borderRadius:BorderRadius.circular(15),
         splashColor: Colors.white.withOpacity(0.2),
         highlightColor: Colors.transparent,
-        onTap: (){},
+        onTap: (){
+          Navigator.of(context).pop();
+          if(page == PageName.HomePage){
+            return;
+          }
+          Navigator.of(context).push(CustomPageRouteBuilder(enterPage: enterPage, exitPage: HomePage()));
+        },
         child: ListTile(
           leading: Container(
             height: 40,

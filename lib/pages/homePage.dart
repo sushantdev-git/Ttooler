@@ -7,6 +7,7 @@ import 'package:ttooler/widgets/home/glanceHeader.dart';
 import 'package:ttooler/widgets/home/info_greeting.dart';
 
 class HomePage extends StatefulWidget {
+  static const routeName = "/HomePage";
   const HomePage({Key? key}) : super(key: key);
 
   @override

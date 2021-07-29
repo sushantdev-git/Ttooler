@@ -19,15 +19,15 @@ class GlanceHeader extends StatelessWidget {
       children: [
         Row(
           children: [
-            if(glanceType == GlanceType.Todo)GlanceIcon(imageAddress: "assets/images/icon_images/todo_icon.png",),
-            if(glanceType == GlanceType.Reminder)GlanceIcon(imageAddress: "assets/images/icon_images/reminder1.png",),
-            if(glanceType == GlanceType.TimeTable)GlanceIcon(imageAddress: "assets/images/icon_images/bookIcon.png",),
+            if(glanceType == GlanceType.Todo)const GlanceIcon(imageAddress: "assets/images/icon_images/todo_icon.png",),
+            if(glanceType == GlanceType.Reminder)const GlanceIcon(imageAddress: "assets/images/icon_images/reminder1.png",),
+            if(glanceType == GlanceType.TimeTable)const GlanceIcon(imageAddress: "assets/images/icon_images/bookIcon.png",),
             SizedBox(
               width: 10,
             ),
-            if(glanceType == GlanceType.Todo)Text("Todo", style: glanceTypeHeadingStyle),
-            if(glanceType == GlanceType.Reminder)Text("Reminder", style: glanceTypeHeadingStyle),
-            if(glanceType == GlanceType.TimeTable)Text("TimeTable", style: glanceTypeHeadingStyle),
+            if(glanceType == GlanceType.Todo)const Text("Todo", style: glanceTypeHeadingStyle),
+            if(glanceType == GlanceType.Reminder)const Text("Reminder", style: glanceTypeHeadingStyle),
+            if(glanceType == GlanceType.TimeTable)const Text("TimeTable", style: glanceTypeHeadingStyle),
           ],
         ),
         //here passing the changGlance function to BorderIconButton which we are getting from home page so when user press any of the arrow button

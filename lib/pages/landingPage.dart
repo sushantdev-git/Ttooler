@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ttooler/pageRoutebuilder/customPageRouteBuilder.dart';
-import 'package:ttooler/screens/homePage.dart';
+
+import 'homePage.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({Key? key}) : super(key: key);
