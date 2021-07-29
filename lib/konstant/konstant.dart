@@ -7,7 +7,7 @@ enum GlanceType{
   TimeTable
 }
 
-final glanceTypeHeadingStyle = TextStyle(
+const glanceTypeHeadingStyle = TextStyle(
   fontSize: 30,
   fontWeight: FontWeight.w700,
 );
