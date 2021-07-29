@@ -15,7 +15,7 @@ class CustomPageRouteBuilder extends PageRouteBuilder {
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondAnimation,
-    Widget child,
+    Widget child, //this child in enter page that we are passing in to the super constructor
   ) {
     return Stack(children: [
       SlideTransition(
@@ -30,7 +30,7 @@ class CustomPageRouteBuilder extends PageRouteBuilder {
           begin: Offset(1, 0),
           end: Offset(0, 0),
         ).animate(animation),
-        child: enterPage,
+        child: child,
       ),
     ]);
   }

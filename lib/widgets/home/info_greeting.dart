@@ -14,7 +14,7 @@ class InfoGreeting extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Random", style: TextStyle(
+              Text("Sushant", style: TextStyle(
                 fontSize: 25,
               ),),
               Text("Good Morning", style: TextStyle(

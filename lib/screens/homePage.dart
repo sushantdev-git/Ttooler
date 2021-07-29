@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ttooler/widgets/buttons/iconButton.dart';
 import 'package:ttooler/widgets/drawer.dart';
-import 'package:ttooler/widgets/hamburgerButton.dart';
+import 'package:ttooler/widgets/buttons/hamburgerButton.dart';
 import 'package:ttooler/widgets/home/info_greeting.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     final mediaQuery = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        key: _scaffoldKey,
+          key: _scaffoldKey,
           drawer: DrawerWidget(),
           body: Container(
             height: mediaQuery.height,
@@ -37,7 +38,48 @@ class _HomePageState extends State<HomePage> {
                     },
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  InfoGreeting()
+                  InfoGreeting(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("At Glance,"),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 50,
+                                      child: Image.asset(
+                                          "assets/images/icon_images/todo_icon.png"),
+                                    ),
+                                    SizedBox(width: 10,),
+                                    Text(
+                                      "Todo",
+                                      style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                BorderIconButton(icon: Icons.east, onPress: (){})
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
