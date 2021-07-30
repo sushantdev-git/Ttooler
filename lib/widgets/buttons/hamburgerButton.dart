@@ -7,15 +7,15 @@ class HamburgerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10, right: 10, bottom: 10),
+      padding: EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(width: 40, height: 5, color: Colors.white,),
+          Container(width: 35, height: 4, color: Colors.white,),
           SizedBox(height: 5,),
-          Container(width: 35, height: 5, color: Colors.white,),
+          Container(width: 30, height: 4, color: Colors.white,),
           SizedBox(height: 5,),
-          Container(width: 30, height: 5, color: Colors.white,)
+          Container(width: 25, height: 4, color: Colors.white,)
         ],
       ),
     );
