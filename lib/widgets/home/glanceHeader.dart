@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:ttooler/konstant/konstant.dart';
-import 'package:ttooler/widgets/buttons/iconButton.dart';
 
 class GlanceHeader extends StatelessWidget {
   //this GlanceHeader widget is used to control the glance of HomePage
   //this widget and will render Header of glance
   final GlanceType glanceType;
-  final Function changeGlance;
 
   const GlanceHeader({
-    required this.glanceType, required this.changeGlance, Key? key,
+    required this.glanceType, Key? key,
   }) : super(key: key);
 
   @override
@@ -30,24 +28,6 @@ class GlanceHeader extends StatelessWidget {
             if(glanceType == GlanceType.TimeTable)const Text("TimeTable", style: glanceTypeHeadingStyle),
           ],
         ),
-        //here passing the changGlance function to BorderIconButton which we are getting from home page so when user press any of the arrow button
-        //at any glance that function will be called and home page will change accordingly that.
-        if(glanceType == GlanceType.Todo)BorderIconButton(
-          icon: Icons.east,
-          onPress: () => changeGlance(GlanceType.Reminder),
-        ),
-        if(glanceType == GlanceType.TimeTable)BorderIconButton(
-          icon: Icons.west,
-          onPress: () => changeGlance(GlanceType.Reminder),
-        ),
-        if(glanceType == GlanceType.Reminder)BorderIconButton(
-          icon: Icons.west,
-          onPress: () => changeGlance(GlanceType.Todo),
-        ),
-        if(glanceType == GlanceType.Reminder)BorderIconButton(
-          icon: Icons.east,
-          onPress: () => changeGlance(GlanceType.TimeTable),
-        )
       ],
     );
   }
