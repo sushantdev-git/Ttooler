@@ -22,14 +22,14 @@ class CustomPageRouteBuilder extends PageRouteBuilder {
         position: Tween(
           begin: Offset(0, 0),
           end: Offset(-0.3,0)
-        ).animate(animation),
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
         child: exitPage,
       ),
       SlideTransition(
         position: Tween<Offset>(
           begin: Offset(1, 0),
           end: Offset(0, 0),
-        ).animate(animation),
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
         child: child,
       ),
     ]);
