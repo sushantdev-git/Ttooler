@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ttooler/konstant/konstant.dart';
-import 'package:ttooler/pageRoutebuilder/customPageRouteBuilder.dart';
-import 'package:ttooler/pages/aboutPage.dart';
-import 'package:ttooler/pages/bookshelfPage.dart';
-import 'package:ttooler/pages/homePage.dart';
-import 'package:ttooler/pages/reminderPage.dart';
-import 'package:ttooler/pages/timetablePage.dart';
-import 'package:ttooler/pages/todoPage.dart';
+
 
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({Key? key}) : super(key: key);
+  final Function pushPage;
+  const DrawerWidget({required this.pushPage,Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +34,14 @@ class DrawerWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10,),
-            const DrawerItem(PageName.HomePage, iconAddress: "assets/images/icon_images/home.png", title: "Home", enterPage: HomePage(),),
-            const DrawerItem(PageName.NotHomePage, iconAddress: "assets/images/icon_images/todo_icon.png", title: "Todo", enterPage: TodoPage(),),
-            const DrawerItem(PageName.NotHomePage, iconAddress: "assets/images/icon_images/reminder1.png", title: "Reminder", enterPage: ReminderPage(),),
-            const DrawerItem(PageName.NotHomePage,iconAddress: "assets/images/icon_images/reminder.png", title: "TimeTable", enterPage: TimetablePage(),),
-            const Divider(height: 20, thickness: 1, color: Colors.white,),
-            const DrawerItem(PageName.NotHomePage,iconAddress: "assets/images/icon_images/bookIcon.png", title: "BookShelf", enterPage: BookshelfPage(),),
-            const Divider(height: 20, thickness: 1, color: Colors.white,),
-            const DrawerItem(PageName.NotHomePage, iconAddress: "assets/images/icon_images/mug_.png", title: "About", enterPage: AboutPage(),),
+            DrawerItem(page: PageName.HomePage, iconAddress: "assets/images/icon_images/home.png", title: "Home", pushPage: pushPage,),
+            DrawerItem(page: PageName.Todo, iconAddress: "assets/images/icon_images/todo_icon.png", title: "Todo", pushPage: pushPage,),
+            DrawerItem(page: PageName.Reminder, iconAddress: "assets/images/icon_images/reminder1.png", title: "Reminder", pushPage: pushPage,),
+            DrawerItem(page: PageName.TimeTable,iconAddress: "assets/images/icon_images/reminder.png", title: "TimeTable", pushPage: pushPage,),
+            Divider(height: 20, thickness: 1, color: Colors.white,),
+            DrawerItem(page: PageName.BookShelf,iconAddress: "assets/images/icon_images/bookIcon.png", title: "BookShelf", pushPage: pushPage,),
+            Divider(height: 20, thickness: 1, color: Colors.white,),
+            DrawerItem(page: PageName.About, iconAddress: "assets/images/icon_images/mug_.png", title: "About", pushPage: pushPage,),
           ],
         )
       )
@@ -58,10 +53,10 @@ class DrawerItem extends StatelessWidget {
 
   final String iconAddress;
   final String title;
-  final Widget enterPage;
   final PageName ? page;
+  final Function pushPage;
 
-  const DrawerItem(this.page, {required this.iconAddress, required this.title, required this.enterPage});
+  const DrawerItem( {required this.page, required this.iconAddress, required this.title, required this.pushPage});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +73,7 @@ class DrawerItem extends StatelessWidget {
           if(page == PageName.HomePage){
             return;
           }
-          Navigator.of(context).push(CustomPageRouteBuilder(enterPage: enterPage, exitPage: HomePage()));
+          pushPage(page);
         },
         child: ListTile(
           leading: Container(
