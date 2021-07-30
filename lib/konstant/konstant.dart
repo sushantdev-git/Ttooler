@@ -9,7 +9,11 @@ enum GlanceType{
 
 enum PageName{
   HomePage,
-  NotHomePage,
+  Todo,
+  Reminder,
+  TimeTable,
+  BookShelf,
+  About
 }
 
 const glanceTypeHeadingStyle = TextStyle(
