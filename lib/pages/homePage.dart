@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                   height: _bottomNavigationSelectedIndex == 2 ? 40 : 30,
                   width: _bottomNavigationSelectedIndex == 2 ? 40 : 30,
                   child: Image.asset(
-                    "assets/images/icon_images/bookIcon.png",
+                    "assets/images/icon_images/calender.png",
                     fit: BoxFit.cover,
                   ),
                 ),

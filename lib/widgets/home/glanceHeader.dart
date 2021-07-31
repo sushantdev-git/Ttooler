@@ -19,7 +19,7 @@ class GlanceHeader extends StatelessWidget {
           children: [
             if(glanceType == GlanceType.Todo)const GlanceIcon(imageAddress: "assets/images/icon_images/todo_icon.png",),
             if(glanceType == GlanceType.Reminder)const GlanceIcon(imageAddress: "assets/images/icon_images/reminder1.png",),
-            if(glanceType == GlanceType.TimeTable)const GlanceIcon(imageAddress: "assets/images/icon_images/bookIcon.png",),
+            if(glanceType == GlanceType.TimeTable)const GlanceIcon(imageAddress: "assets/images/icon_images/calender.png",),
             SizedBox(
               width: 10,
             ),

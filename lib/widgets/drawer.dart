@@ -37,7 +37,7 @@ class DrawerWidget extends StatelessWidget {
             DrawerItem(page: PageName.HomePage, iconAddress: "assets/images/icon_images/home.png", title: "Home", pushPage: pushPage,),
             DrawerItem(page: PageName.Todo, iconAddress: "assets/images/icon_images/todo_icon.png", title: "Todo", pushPage: pushPage,),
             DrawerItem(page: PageName.Reminder, iconAddress: "assets/images/icon_images/reminder1.png", title: "Reminder", pushPage: pushPage,),
-            DrawerItem(page: PageName.TimeTable,iconAddress: "assets/images/icon_images/reminder.png", title: "TimeTable", pushPage: pushPage,),
+            DrawerItem(page: PageName.TimeTable,iconAddress: "assets/images/icon_images/calender.png", title: "TimeTable", pushPage: pushPage,),
             Divider(height: 20, thickness: 1, color: Colors.white,),
             DrawerItem(page: PageName.BookShelf,iconAddress: "assets/images/icon_images/bookIcon.png", title: "BookShelf", pushPage: pushPage,),
             Divider(height: 20, thickness: 1, color: Colors.white,),
