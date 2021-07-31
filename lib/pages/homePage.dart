@@ -9,7 +9,9 @@ import 'package:ttooler/pages/timetablePage.dart';
 import 'package:ttooler/pages/todoPage.dart';
 import 'package:ttooler/widgets/drawer.dart';
 import 'package:ttooler/widgets/buttons/hamburgerButton.dart';
-import 'package:ttooler/widgets/home/glanceHeader.dart';
+import 'package:ttooler/widgets/home/glances/reminderGlance.dart';
+import 'package:ttooler/widgets/home/glances/timetableGlance.dart';
+import 'package:ttooler/widgets/home/glances/todoGlance.dart';
 import 'package:ttooler/widgets/home/info_greeting.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
@@ -63,7 +65,6 @@ class _HomePageState extends State<HomePage> {
   GlanceType _glanceType = GlanceType.Todo;
 
   void setGlaceType(int index) async {
-    print(index);
     _swiperController.move(index);
     _bottomNavigationSelectedIndex = index;
     if (index == 0) {
@@ -168,6 +169,7 @@ class _HomePageState extends State<HomePage> {
           height: mediaQuery.height,
           width: mediaQuery.width,
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               children: [
                 Container(
@@ -186,44 +188,13 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.height*(2/3),
-                  width: double.infinity,
-                  child: Swiper(
-                    loop: false,
-                    onIndexChanged:setGlaceSwiper,
-                    controller:_swiperController,
-                    itemBuilder: (BuildContext context,int index){
-                      return  index == 0 ? TodoGlance(glanceType: GlanceType.Todo) : index == 1 ? TodoGlance(glanceType: GlanceType.Reminder) : TodoGlance(glanceType: GlanceType.TimeTable);
-                    },
-                    itemCount: 3,
-                    pagination: new SwiperPagination(),
-                  ),
-                )
+                Visibility(visible : _glanceType == GlanceType.Todo ? true : false ,child: TodoGlance(), maintainState: true,),
+                Visibility(visible : _glanceType == GlanceType.Reminder ? true : false ,child: ReminderGlance(), maintainState: true,),
+                Visibility(visible : _glanceType == GlanceType.TimeTable ? true : false ,child: TimetableGlance(), maintainState: true,),
               ]
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class TodoGlance extends StatelessWidget {
-
-  final GlanceType glanceType;
-  TodoGlance({required this.glanceType});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(left: 20, right: 20),
-      width: double.infinity,
-      child: Column(
-        children: [
-          GlanceHeader(glanceType: glanceType,),
-          Text("I am todo"),
-        ],
       ),
     );
   }
