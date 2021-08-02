@@ -6,7 +6,7 @@ class CustomPageRouteBuilder extends PageRouteBuilder {
 
   CustomPageRouteBuilder({required this.enterPage, required this.exitPage})
       : super(
-          transitionDuration: Duration(milliseconds: 300),
+          transitionDuration: Duration(milliseconds: 450),
           pageBuilder: (context, animation, secondAnimation) => enterPage,
         );
 
@@ -17,21 +17,13 @@ class CustomPageRouteBuilder extends PageRouteBuilder {
     Animation<double> secondAnimation,
     Widget child, //this child in enter page that we are passing in to the super constructor
   ) {
-    return Stack(children: [
-      SlideTransition(
-        position: Tween(
-          begin: Offset(0, 0),
-          end: Offset(-0.3,0)
-        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
-        child: exitPage,
-      ),
+    return
       SlideTransition(
         position: Tween<Offset>(
           begin: Offset(1, 0),
           end: Offset(0, 0),
-        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
         child: child,
-      ),
-    ]);
+      );
   }
 }
