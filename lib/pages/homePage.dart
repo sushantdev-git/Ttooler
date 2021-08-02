@@ -14,7 +14,7 @@ import 'package:ttooler/widgets/home/glances/timetableGlance.dart';
 import 'package:ttooler/widgets/home/glances/todoGlance.dart';
 import 'package:ttooler/widgets/home/info_greeting.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
-
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = "/HomePage";
@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void setGlaceSwiper(int index){
+  void setGlaceSwiper(int index) {
     setState(() {
       _bottomNavigationSelectedIndex = index;
     });
@@ -106,61 +106,52 @@ class _HomePageState extends State<HomePage> {
     final mediaQuery = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        extendBody: true,
         key: _scaffoldKey,
         appBar: AppBar(
           elevation: 0,
-          leading:
-          InkWell(
-            child:const HamburgerButton(),
+          leading: InkWell(
+            child: const HamburgerButton(),
             onTap: () {
               _scaffoldKey.currentState!.openDrawer();
             },
             borderRadius: BorderRadius.circular(10),
-            highlightColor: Colors.transparent, //this line will remove the highlight color of inkwell
+            highlightColor: Colors
+                .transparent, //this line will remove the highlight color of inkwell
           ),
         ),
         drawer: DrawerWidget(
           pushPage: pushPageUtil,
         ),
         //here added bottom navigation bar
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color(0xff464D65),
-          currentIndex: _bottomNavigationSelectedIndex,
-          selectedItemColor: Colors.white,
+        bottomNavigationBar: CurvedNavigationBar(
+          animationDuration: Duration(milliseconds: 500),
+          backgroundColor: Colors.transparent,
+          index: _bottomNavigationSelectedIndex,
+          buttonBackgroundColor: Color(0xffb1acfa),
+          color: Color(0xff464D65),
           items: [
-            BottomNavigationBarItem(
-                icon: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  height: _bottomNavigationSelectedIndex == 0 ? 40 : 30,
-                  width: _bottomNavigationSelectedIndex == 0 ? 40 : 30,
-                  child: Image.asset(
-                    "assets/images/icon_images/todo_icon.png",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                label: "Todo"),
-            BottomNavigationBarItem(
-                icon: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  height: _bottomNavigationSelectedIndex == 1 ? 40 : 30,
-                  width: _bottomNavigationSelectedIndex == 1 ? 40 : 30,
-                  child: Image.asset(
-                    "assets/images/icon_images/reminder1.png",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                label: "Reminder"),
-            BottomNavigationBarItem(
-                icon: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  height: _bottomNavigationSelectedIndex == 2 ? 40 : 30,
-                  width: _bottomNavigationSelectedIndex == 2 ? 40 : 30,
-                  child: Image.asset(
-                    "assets/images/icon_images/calender.png",
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                label: "TimeTable"),
+            Container(
+              height: 35,
+              child: Image.asset(
+                "assets/images/icon_images/todo_icon.png",
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              height: 35,
+              child: Image.asset(
+                "assets/images/icon_images/reminder1.png",
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              height: 35,
+              child: Image.asset(
+                "assets/images/icon_images/calender.png",
+                fit: BoxFit.cover,
+              ),
+            ),
           ],
           onTap: setGlaceType,
         ),
@@ -170,29 +161,41 @@ class _HomePageState extends State<HomePage> {
           width: mediaQuery.width,
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const InfoGreeting(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text("At Glance,",),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
+            child: Column(children: [
+              Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const InfoGreeting(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      "At Glance,",
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
                 ),
-                Visibility(visible : _glanceType == GlanceType.Todo ? true : false ,child: TodoGlance(), maintainState: true,),
-                Visibility(visible : _glanceType == GlanceType.Reminder ? true : false ,child: ReminderGlance(), maintainState: true,),
-                Visibility(visible : _glanceType == GlanceType.TimeTable ? true : false ,child: TimetableGlance(), maintainState: true,),
-              ]
-            ),
+              ),
+              Visibility(
+                visible: _glanceType == GlanceType.Todo ? true : false,
+                child: TodoGlance(),
+                maintainState: true,
+              ),
+              Visibility(
+                visible: _glanceType == GlanceType.Reminder ? true : false,
+                child: ReminderGlance(),
+                maintainState: true,
+              ),
+              Visibility(
+                visible: _glanceType == GlanceType.TimeTable ? true : false,
+                child: TimetableGlance(),
+                maintainState: true,
+              ),
+            ]),
           ),
         ),
       ),
