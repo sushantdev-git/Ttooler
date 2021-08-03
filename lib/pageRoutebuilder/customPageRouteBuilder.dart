@@ -6,7 +6,7 @@ class CustomPageRouteBuilder extends PageRouteBuilder {
 
   CustomPageRouteBuilder({required this.enterPage, required this.exitPage})
       : super(
-          transitionDuration: Duration(milliseconds: 450),
+          transitionDuration: Duration(milliseconds: 350),
           pageBuilder: (context, animation, secondAnimation) => enterPage,
         );
 
@@ -22,7 +22,7 @@ class CustomPageRouteBuilder extends PageRouteBuilder {
         position: Tween<Offset>(
           begin: Offset(1, 0),
           end: Offset(0, 0),
-        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
         child: child,
       );
   }
