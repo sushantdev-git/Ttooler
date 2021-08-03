@@ -1,172 +1,35 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:ttooler/pageRoutebuilder/heroPageRouteBuilder.dart';
+import 'package:ttooler/konstant/konstant.dart';
+import 'package:ttooler/modals/todoProvider.dart';
+import 'package:ttooler/widgets/buttons/customFAB.dart';
+import 'package:ttooler/widgets/home/glanceHeader.dart';
+import 'package:ttooler/widgets/home/glances/glaceUtility/expanstionCard.dart';
 import 'package:ttooler/widgets/home/glances/todoGlance.dart';
+import 'package:provider/provider.dart';
 
 class TodoPage extends StatelessWidget {
   const TodoPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _todos = Provider.of<TodoProvider>(context);
     return Scaffold(
       floatingActionButton: CustomFloatingAB(),
       appBar: AppBar(
         elevation: 0,
       ),
       body: ListView.builder(
+        padding: EdgeInsets.all(20),
         physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) => TodoGlance(),
-        itemCount: 1,
+        itemBuilder: (context, index) => index == 0 ? GlanceHeader(glanceType: GlanceType.Todo) : TodoCard(title: _todos.items[index-1].title, subtitle: _todos.items[index-1].subtitle!, description: _todos.items[index-1].description),
+        itemCount: _todos.items.length+1,
       ),
     );
   }
 }
 
-class CustomFloatingAB extends StatelessWidget {
-  const CustomFloatingAB({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.all(10), child: GestureDetector(
-      onTap: (){
-        Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-          return const _AddTodoPopupCard();
-        },));
-      },
-      child: Hero(
-        tag: "TodoButton",
-        createRectTween: (begin, end) {
-          return CustomRectTween(begin: begin as Rect, end: end as Rect);
-        },
-        child: Material(
-          elevation: 2,
-          color: Theme.of(context).accentColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-          child: const Icon(
-            Icons.add,
-            size: 56,
-            color: Color(0xff262A3D),
-          ),
-        ),
-      ),
-    ),);
-  }
-}
-
-class _AddTodoPopupCard extends StatelessWidget {
-  /// {@macro add_todo_popup_card}
-  const _AddTodoPopupCard({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Hero(
-            tag: "TodoButton",
-            createRectTween: (begin, end) {
-              return CustomRectTween(begin: begin as Rect , end: end as Rect);
-            },
-            child: Material(
-              color: Theme.of(context).accentColor,
-              elevation: 4,
-              shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-              child: SingleChildScrollView(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Enter Todo", style: TextStyle(
-                          fontSize: 25,
-                          color: Color(0xff262A3D),
-                          // fontWeight: FontWeight.w700
-                        ),),
-                        SizedBox(height: 10,),
-                        Container(
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                              color: Color(0xff262A3D),
-                              borderRadius: BorderRadius.circular(15)
-                          ),
-                          child: const TextField(
-                            style: TextStyle(
-                                color: Colors.white
-                            ),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              labelText: "Title",
-                            ),
-                            cursorColor: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        Container(
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: Color(0xff262A3D),
-                            borderRadius: BorderRadius.circular(15)
-                          ),
-                          child: const TextField(
-                            style: TextStyle(
-                                color: Colors.white
-                            ),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              labelText: "Subtitle",
-                            ),
-                            cursorColor: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        Container(
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                              color: Color(0xff262A3D),
-                              borderRadius: BorderRadius.circular(15)
-                          ),
-                          child: const TextField(
-                            style: TextStyle(
-                              color: Colors.white
-                            ),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              labelText: "Description"
-                            ),
-                            cursorColor: Colors.white,
-                            maxLines: null,
-
-                          ),
-                        ),
-                        SizedBox(height: 20,),
-                        FittedBox(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              ElevatedButton(onPressed: (){}, child: Text("Choose category")),
-                              SizedBox(width: 30,),
-                              ElevatedButton(onPressed: (){}, child: Text("Ok")),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class CustomRectTween extends RectTween {
   /// {@macro custom_rect_tween}
