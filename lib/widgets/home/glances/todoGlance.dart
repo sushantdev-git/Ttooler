@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ttooler/konstant/konstant.dart';
@@ -10,10 +12,19 @@ import 'package:ttooler/widgets/home/glances/glaceUtility/expanstionCard.dart';
 
 class TodoGlance extends StatelessWidget {
 
+  List<Widget> getTodo(List<Todo> todoData){
+    List<Widget> _todo= [];
+
+    for(int i=0; i<min(todoData.length, 4); i++){
+      _todo.add(TodoCard(title: todoData[i].title, subtitle: todoData[i].subtitle!, description: todoData[i].description));
+    }
+
+    return _todo;
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    final todos = Provider.of<TodoProvider>(context, listen: false);
+    final _todos = Provider.of<TodoProvider>(context);
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20),
       margin: EdgeInsets.only(bottom: 100),
@@ -21,16 +32,10 @@ class TodoGlance extends StatelessWidget {
       child: Column(
         children: [
           GlanceHeader(glanceType: GlanceType.Todo,),
-          todos.items.length == 0 ? Column(
+          _todos.items.length != 0 ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20,),
-              TodoCard(),
-              SizedBox(height: 15,),
-              TodoCard(),
-              SizedBox(height: 15,),
-              TodoCard(),
-              SizedBox(height: 15,),
+              ...getTodo(_todos.items),
               TextButton(onPressed: (){
                 Navigator.of(context).push(CustomPageRouteBuilder(enterPage: TodoPage(), exitPage: HomePage()));
               }, child: Row(
