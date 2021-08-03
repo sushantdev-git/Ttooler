@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:ttooler/widgets/buttons/iconButton.dart';
 
 class TodoCard extends StatelessWidget {
-  const TodoCard({Key? key}) : super(key: key);
+
+  final String title;
+  final String subtitle;
+  final String description;
+
+  TodoCard({required this.title, required this.subtitle, required this.description});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(top: 15, bottom: 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
         color:  Color(0xff262A3D),
@@ -36,14 +42,14 @@ class TodoCard extends StatelessWidget {
           collapsedTextColor: Colors.white,
           textColor: Colors.white,
           iconColor: Colors.white,
-          title: Text("Book", style: TextStyle(
+          title: Text(title, style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700
           ),),
-          subtitle: Text("This is looking smooth"),
+          subtitle: Text(subtitle),
           leading: Icon(Icons.book),
           children: [
-            Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."),
+            Text(description, textAlign: TextAlign.start,),
             SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
