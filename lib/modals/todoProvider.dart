@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 class Todo{
   final String title;
   late String ? subtitle;
-  final String content;
+  final String description;
   final String key;
 
-  Todo({required this.title, this.subtitle = "", required this.content, required this.key});
+  Todo({required this.title, this.subtitle = "", required this.description, required this.key});
 
 }
 
@@ -14,13 +14,13 @@ class TodoProvider extends ChangeNotifier{
 
   List<Todo> _items =[];
 
-  get items {
+  List<Todo> get items {
     return [..._items];
   }
 
-  void addTodo({required String title, String ? subtitle, required String content }){
+  void addTodo({required String title, String ? subtitle, required String description }){
     _items.add(
-      Todo(title: title, content: content, subtitle: subtitle, key: DateTime.now().toString())
+      Todo(title: title, description: description, subtitle: subtitle, key: DateTime.now().toString())
     );
     notifyListeners();
   }
@@ -36,6 +36,6 @@ class TodoProvider extends ChangeNotifier{
 
     final Todo todo = _items[index];
 
-    _items.insert(index, Todo(title: title, content: content, key: key, subtitle: subtitle));
+    _items.insert(index, Todo(title: title, description: content, key: key, subtitle: subtitle));
   }
 }
