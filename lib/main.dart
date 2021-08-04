@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ttooler/modals/todoProvider.dart';
 import 'package:ttooler/pages/landingPage.dart';
+import 'package:ttooler/widgets/buttons/iconButton.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,7 +65,20 @@ class MyApp extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               primary: Color(0xff363a55),
               padding: EdgeInsets.all(15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              )
             )
+          ),
+
+          sliderTheme: SliderThemeData(// This is what you are asking for// Custom Gray Color
+            overlayColor: Colors.white,  // Custom Thumb overlay Color
+            // activeColor: Theme.of(context).backgroundColor,
+            // inactiveColor: Theme.of(context).backgroundColor,
+            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
+            overlayShape: RoundSliderOverlayShape(overlayRadius: 20.0),
+            valueIndicatorShape: PaddleSliderValueIndicatorShape(),
+
           )
 
         ),
