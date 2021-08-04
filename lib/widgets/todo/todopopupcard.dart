@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ttooler/modals/todoProvider.dart';
 import 'package:ttooler/pages/todoPage.dart';
 import 'package:provider/provider.dart';
+import 'package:ttooler/widgets/todo/categoryList.dart';
 
 class AddTodoPopupCard extends StatefulWidget {
   /// {@macro add_todo_popup_card}
@@ -12,24 +13,19 @@ class AddTodoPopupCard extends StatefulWidget {
 }
 
 class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
-
   late GlobalKey<FormState> _form = GlobalKey<FormState>();
   final _titleTextController = TextEditingController();
   final _subtitleTextController = TextEditingController();
   final _descriptionTextController = TextEditingController();
 
-
-  var initValues = {
-    "title" : "",
-    "price" : "",
-    "description" : ""
-  };
+  double _slideValue = 1;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -37,9 +33,14 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
     super.dispose();
   }
 
-  void saveData(){
+  void saveData() {
     final _todos = Provider.of<TodoProvider>(context, listen: false);
-    _todos.addTodo(title: _titleTextController.text, description: _descriptionTextController.text, subtitle: _subtitleTextController.text);
+    _todos.addTodo(
+        title: _titleTextController.text,
+        description: _descriptionTextController.text,
+        subtitle: _subtitleTextController.text,
+      priority: _slideValue.toInt(),
+    );
     Navigator.of(context).pop();
   }
 
@@ -52,13 +53,13 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
           child: Hero(
             tag: "TodoButton",
             createRectTween: (begin, end) {
-              return CustomRectTween(begin: begin as Rect , end: end as Rect);
+              return CustomRectTween(begin: begin as Rect, end: end as Rect);
             },
             child: Material(
               color: Theme.of(context).accentColor,
               elevation: 4,
-              shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
               child: SingleChildScrollView(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
@@ -70,22 +71,24 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Enter Todo", style: TextStyle(
-                            fontSize: 25,
-                            color: Color(0xff262A3D),
-                            // fontWeight: FontWeight.w700
-                          ),),
-                          SizedBox(height: 10,),
+                          Text(
+                            "Enter Todo",
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Color(0xff262A3D),
+                              // fontWeight: FontWeight.w700
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Container(
                             padding: EdgeInsets.all(6),
                             decoration: BoxDecoration(
                                 color: Color(0xff262A3D),
-                                borderRadius: BorderRadius.circular(15)
-                            ),
+                                borderRadius: BorderRadius.circular(15)),
                             child: TextFormField(
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),
+                              style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 labelText: "Title",
@@ -94,17 +97,16 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                               controller: _titleTextController,
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Container(
                             padding: EdgeInsets.all(6),
                             decoration: BoxDecoration(
                                 color: Color(0xff262A3D),
-                                borderRadius: BorderRadius.circular(15)
-                            ),
+                                borderRadius: BorderRadius.circular(15)),
                             child: TextFormField(
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),
+                              style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 labelText: "Subtitle",
@@ -113,48 +115,97 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                               controller: _subtitleTextController,
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Container(
                             padding: EdgeInsets.all(6),
                             decoration: BoxDecoration(
                                 color: Color(0xff262A3D),
-                                borderRadius: BorderRadius.circular(15)
-                            ),
+                                borderRadius: BorderRadius.circular(15)),
                             child: TextFormField(
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),
+                              style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  labelText: "Description"
-                              ),
+                                  labelText: "Description"),
                               cursorColor: Colors.white,
                               maxLines: null,
                               controller: _descriptionTextController,
                             ),
                           ),
-                          SizedBox(height: 20,),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text("Set priority", style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                          ),),
+                          Slider(
+                            inactiveColor: Color(0xff181920),
+                            activeColor: Color(0xff181920),
+                            onChanged: (value){
+                                setState(() {
+                                  _slideValue = value;
+                                });
+                            },
+                            value: _slideValue,
+                            divisions: 10,
+                            min: 0,
+                            max: 10,
+                            label: "${_slideValue.toInt()}",
+
+                          ),
                           FittedBox(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                ElevatedButton(onPressed: (){}, child: Text("Choose category")),
-                                SizedBox(width: 30,),
-                                ElevatedButton(onPressed: (){
-                                  if(_titleTextController.text.length <= 2){
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Input valid title")));
-                                    return;
-                                  }
-                                  else if(_subtitleTextController.text.length <= 5){
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Input valid subtitle")));
-                                    return;
-                                  }
-                                  else if(_descriptionTextController.text.length <= 15){
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Input valid description")));
-                                    return;
-                                  }
-                                  saveData();
-                                }, child: Text("Ok")),
+                                ElevatedButton.icon(onPressed: (){
+                                  showDialog(context: context, builder: (context) => AlertDialog(
+                                    backgroundColor: Theme.of(context).primaryColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15)
+                                    ),
+                                    content: CategoryList(),
+                                  ));
+                                }, label: Text("Choose Category"), icon: Icon(Icons.category),),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      if (_titleTextController.text.length <=
+                                          2) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content:
+                                                    Text("Enter valid title"),
+                                            duration: Duration(milliseconds: 400),
+                                          ),
+                                        );
+                                        return;
+                                      } else if (_subtitleTextController
+                                              .text.length <=
+                                          4) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    "Enter valid subtitle"),
+                                          duration: Duration(milliseconds: 400),
+                                        ));
+                                        return;
+                                      } else if (_descriptionTextController
+                                              .text.length <=
+                                          10) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    "Enter valid description"),
+                                          duration: Duration(milliseconds: 400),
+                                        ));
+                                        return;
+                                      }
+                                      saveData();
+                                    },
+                                    child: Text("Ok"),),
                               ],
                             ),
                           ),
