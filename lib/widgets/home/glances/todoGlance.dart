@@ -55,7 +55,7 @@ class TodoGlance extends StatelessWidget {
             child: Center(
               child: TextButton(onPressed: (){
                 Navigator.of(context).push(CustomPageRouteBuilder(enterPage: TodoPage(), exitPage: this));
-              }, child: Text("Your Todo list seems empty \n add some..", style: TextStyle(
+              }, child: Text("Your Todo list seems empty \n add some.. 😒", style: TextStyle(
                 fontSize: 20,
               ), textAlign: TextAlign.center,),),
             ),
