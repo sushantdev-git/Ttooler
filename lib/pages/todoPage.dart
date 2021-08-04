@@ -1,12 +1,10 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:ttooler/konstant/konstant.dart';
 import 'package:ttooler/modals/todoProvider.dart';
 import 'package:ttooler/widgets/buttons/customFAB.dart';
 import 'package:ttooler/widgets/home/glanceHeader.dart';
 import 'package:ttooler/widgets/home/glances/glaceUtility/expanstionCard.dart';
-import 'package:ttooler/widgets/home/glances/todoGlance.dart';
 import 'package:provider/provider.dart';
 
 class TodoPage extends StatelessWidget {
@@ -20,11 +18,19 @@ class TodoPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
       ),
-      body: ListView.builder(
-        padding: EdgeInsets.all(20),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 10, bottom: 20, right: 20, left: 20),
         physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) => index == 0 ? GlanceHeader(glanceType: GlanceType.Todo) : TodoCard(title: _todos.items[index-1].title, subtitle: _todos.items[index-1].subtitle!, description: _todos.items[index-1].description),
-        itemCount: _todos.items.length+1,
+        child: Column(
+          children: [
+            GlanceHeader(glanceType: GlanceType.Todo),
+            ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (context, index) => TodoCard(title: _todos.items[index].title, subtitle: _todos.items[index].subtitle!, description: _todos.items[index].description),
+              itemCount: _todos.items.length,
+            ),
+          ],
+        ),
       ),
     );
   }
