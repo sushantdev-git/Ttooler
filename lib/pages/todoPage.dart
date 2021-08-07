@@ -1,9 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:ttooler/konstant/konstant.dart';
 import 'package:ttooler/modals/todoProvider.dart';
 import 'package:ttooler/widgets/todo/todoFAB.dart';
-import 'package:ttooler/widgets/home/glanceHeader.dart';
 import 'package:ttooler/widgets/todo/tododisplaycard.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +40,7 @@ class TodoPage extends StatelessWidget {
         itemBuilder: (context, index){
           return Column(
             children: [
-              ReminderCard(title: _todos.items[index].title,
+              TodoCard(title: _todos.items[index].title,
                 subtitle: _todos.items[index].subtitle!,
                 description: _todos.items[index].description,
                 index: index,),
