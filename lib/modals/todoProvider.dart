@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:collection/collection.dart';
 
 class Todo{
@@ -6,6 +6,7 @@ class Todo{
   late String ? subtitle;
   final String description;
   final String key;
+  final time = DateTime.now();
   int priority;
 
   Todo({required this.title, this.subtitle = "", required this.description, required this.key, this.priority = 0});
@@ -27,6 +28,7 @@ class TodoProvider extends ChangeNotifier{
         Todo(title: title, description: description, subtitle: subtitle, key: DateTime.now().toString(), priority: priority)
     );
     _items = queue.toList();
+
     notifyListeners();
   }
 
@@ -50,6 +52,7 @@ class TodoProvider extends ChangeNotifier{
     for(int i=0; i<temp.length; i++){
       print(temp[i].title);
       print(temp[i].priority);
+      print(temp[i].time.month);
     }
   }
 }
