@@ -1,13 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ttooler/pageRoutebuilder/heroPageRouteBuilder.dart';
 import 'package:ttooler/widgets/buttons/iconButton.dart';
+import 'package:ttooler/widgets/todo/todopopupcard.dart';
 
 class TodoCard extends StatelessWidget {
 
   final String title;
   final String subtitle;
   final String description;
+  final int index;
 
-  TodoCard({required this.title, required this.subtitle, required this.description});
+  TodoCard({required this.title, required this.subtitle, required this.description, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -36,29 +40,35 @@ class TodoCard extends StatelessWidget {
           splashColor: Colors.transparent
         ),
         child: ExpansionTile(
-
-          childrenPadding: EdgeInsets.all(20),
+          tilePadding: EdgeInsets.only(left: 20, right: 20, top: 10),
+          childrenPadding: EdgeInsets.only(top: 0, left: 20, right: 20, bottom: 15),
           collapsedIconColor: Colors.white,
           collapsedTextColor: Colors.white,
           textColor: Colors.white,
           iconColor: Colors.white,
           title: Text(title, style: TextStyle(
-            fontSize: 20,
+            fontSize: 22,
             fontWeight: FontWeight.w700
           ),),
-          subtitle: Text(subtitle),
-          leading: Icon(Icons.book),
+          subtitle: Text(subtitle, style: TextStyle(
+            fontSize: 18,
+          ),),
+          expandedCrossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(description, textAlign: TextAlign.start,),
+            Text(description, softWrap: true,),
             SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                BorderIconButton(icon: Icons.check, onPress: (){}),
+                BorderIconButton(icon: Icons.check, onPress: (){}, belongTo: "TodoCheck", index: index,),
                 SizedBox(width: 10,),
-                BorderIconButton(icon: Icons.edit, onPress: (){}),
+                BorderIconButton(icon: Icons.edit, onPress: (String heroTag){
+                  Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                    return AddTodoPopupCard(heroTag: heroTag,);
+                  },));
+                }, belongTo: "TodoEdit", index: index,),
                 SizedBox(width: 10,),
-                BorderIconButton(icon: Icons.delete, onPress: (){}),
+                BorderIconButton(icon: Icons.delete, onPress: (){}, belongTo: "TodoDelete", index: index,),
               ],
             ),
           ],

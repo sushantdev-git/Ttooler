@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:ttooler/modals/reminderProvier.dart';
 import 'package:ttooler/modals/todoProvider.dart';
 import 'package:ttooler/pages/landingPage.dart';
 import 'package:ttooler/widgets/buttons/iconButton.dart';
@@ -22,8 +24,11 @@ class MyApp extends StatelessWidget {
         statusBarColor: Color(0xff181920)
     )); //this will set color of status bar
 
-    return ChangeNotifierProvider(
-      create: (context) => TodoProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => TodoProvider(),),
+        ChangeNotifierProvider(create: (context) => ReminderProvider())
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
           home: LandingPage(),
@@ -79,7 +84,34 @@ class MyApp extends StatelessWidget {
             overlayShape: RoundSliderOverlayShape(overlayRadius: 20.0),
             valueIndicatorShape: PaddleSliderValueIndicatorShape(),
 
-          )
+          ),
+
+          dialogTheme: DialogTheme(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 0.1, color: Colors.white),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            elevation: 10
+          ),
+
+          timePickerTheme: TimePickerThemeData(
+            backgroundColor: Color(0xffb1acfa),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            hourMinuteColor: Color(0xff262A3D),
+            hourMinuteTextColor: Colors.white,
+            dialHandColor: Color(0xff262A3D),
+            dialTextColor: Colors.white,
+            // dayPeriodColor: Color(0xff262A3D),
+            dayPeriodTextColor: Colors.white,
+            dayPeriodShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+            dayPeriodBorderSide: BorderSide(width: 2, color: Color(0xff262A3D)),
+          ),
+
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent),
 
         ),
 

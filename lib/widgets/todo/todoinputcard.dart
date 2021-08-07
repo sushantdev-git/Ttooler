@@ -6,7 +6,8 @@ import 'package:ttooler/widgets/todo/categoryList.dart';
 
 class AddTodoPopupCard extends StatefulWidget {
   /// {@macro add_todo_popup_card}
-  AddTodoPopupCard({Key? key}) : super(key: key);
+  final String heroTag;
+  AddTodoPopupCard({required this.heroTag, Key? key}) : super(key: key);
 
   @override
   _AddTodoPopupCardState createState() => _AddTodoPopupCardState();
@@ -48,19 +49,23 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height*(0.7)
+        ),
         child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Hero(
-            tag: "TodoButton",
+            tag: widget.heroTag,
             createRectTween: (begin, end) {
               return CustomRectTween(begin: begin as Rect, end: end as Rect);
             },
             child: Material(
               color: Theme.of(context).accentColor,
-              elevation: 4,
+              elevation: 10,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
               child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Padding(
@@ -161,9 +166,6 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                                 ElevatedButton.icon(onPressed: (){
                                   showDialog(context: context, builder: (context) => AlertDialog(
                                     backgroundColor: Theme.of(context).primaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)
-                                    ),
                                     content: CategoryList(),
                                   ));
                                 }, label: Text("Choose Category"), icon: Icon(Icons.category),),
@@ -222,3 +224,5 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
     );
   }
 }
+
+
