@@ -8,7 +8,7 @@ import 'package:ttooler/pageRoutebuilder/customPageRouteBuilder.dart';
 import 'package:ttooler/pages/homePage.dart';
 import 'package:ttooler/pages/todoPage.dart';
 import 'package:ttooler/widgets/home/glanceHeader.dart';
-import 'package:ttooler/widgets/home/glances/glaceUtility/expanstionCard.dart';
+import 'package:ttooler/widgets/todo/tododisplaycard.dart';
 
 class TodoGlance extends StatelessWidget {
 
@@ -16,7 +16,7 @@ class TodoGlance extends StatelessWidget {
     List<Widget> _todo= [];
 
     for(int i=0; i<min(todoData.length, 4); i++){
-      _todo.add(TodoCard(title: todoData[i].title, subtitle: todoData[i].subtitle!, description: todoData[i].description));
+      _todo.add(TodoCard(title: todoData[i].title, subtitle: todoData[i].subtitle!, description: todoData[i].description, index: i,));
     }
 
     return _todo;
