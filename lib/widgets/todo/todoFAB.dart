@@ -3,8 +3,8 @@ import 'package:ttooler/pageRoutebuilder/heroPageRouteBuilder.dart';
 import 'package:ttooler/pages/todoPage.dart';
 import 'package:ttooler/widgets/todo/todoinputcard.dart';
 
-class CustomFloatingAB extends StatelessWidget {
-  const CustomFloatingAB({Key? key}) : super(key: key);
+class TodoFloatingAB extends StatelessWidget {
+  const TodoFloatingAB({Key? key}) : super(key: key);
 
 
   @override
