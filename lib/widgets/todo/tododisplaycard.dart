@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ttooler/pageRoutebuilder/heroPageRouteBuilder.dart';
 import 'package:ttooler/widgets/buttons/iconButton.dart';
-import 'package:ttooler/widgets/todo/todopopupcard.dart';
+import 'package:ttooler/widgets/todo/todoinputcard.dart';
 
 class TodoCard extends StatelessWidget {
 
@@ -60,15 +60,15 @@ class TodoCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                BorderIconButton(icon: Icons.check, onPress: (){}, belongTo: "TodoCheck", index: index,),
+                BorderIconButton(icon: Icons.check, onPress: (){}, belongTo: "TodoCheck", type: "Check", index: index,),
                 SizedBox(width: 10,),
                 BorderIconButton(icon: Icons.edit, onPress: (String heroTag){
                   Navigator.of(context).push(HeroDialogRoute(builder: (context) {
                     return AddTodoPopupCard(heroTag: heroTag,);
                   },));
-                }, belongTo: "TodoEdit", index: index,),
+                }, belongTo: "TodoEdit", type: "Edit", index: index,),
                 SizedBox(width: 10,),
-                BorderIconButton(icon: Icons.delete, onPress: (){}, belongTo: "TodoDelete", index: index,),
+                BorderIconButton(icon: Icons.delete, onPress: (){}, belongTo: "TodoDelete", type: "Delete", index: index,),
               ],
             ),
           ],
