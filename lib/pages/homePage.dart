@@ -15,7 +15,6 @@ import 'package:ttooler/widgets/home/glances/reminderGlance.dart';
 import 'package:ttooler/widgets/home/glances/timetableGlance.dart';
 import 'package:ttooler/widgets/home/glances/todoGlance.dart';
 import 'package:ttooler/widgets/home/info_greeting.dart';
-import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -56,38 +55,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   //we can use this key to trigger the drawer without using appBar
-  final _swiperController = SwiperController();
 
   int _bottomNavigationSelectedIndex = 0;
 
   void pushPageUtil(PageName name) {
+    //this function is used to push page on basis of press from drawer
     widget.pushPage(name, context);
   }
 
   GlanceType _glanceType = GlanceType.Todo;
 
-  void setGlaceType(int index) async {
-    _swiperController.move(index);
+  void setGlaceType(int index){
     _bottomNavigationSelectedIndex = index;
-    if (index == 0) {
-      setState(() {
-        _glanceType = GlanceType.Todo;
-      });
-    } else if (index == 1) {
-      setState(() {
-        _glanceType = GlanceType.Reminder;
-      });
-    } else if (index == 2) {
-      setState(() {
-        _glanceType = GlanceType.TimeTable;
-      });
-    }
-  }
-
-  void setGlaceSwiper(int index) {
-    setState(() {
-      _bottomNavigationSelectedIndex = index;
-    });
     if (index == 0) {
       setState(() {
         _glanceType = GlanceType.Todo;
@@ -125,12 +104,6 @@ class _HomePageState extends State<HomePage> {
         ),
         drawer: DrawerWidget(
           pushPage: pushPageUtil,
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            _todo.printQueue();
-          },
-          child: Text("print"),
         ),
         //here added bottom navigation bar
         bottomNavigationBar: CurvedNavigationBar(
@@ -189,10 +162,13 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              Visibility(
-                visible: _glanceType == GlanceType.Todo ? true : false,
-                child: TodoGlance(),
-                maintainState: true,
+              GestureDetector(
+
+                child: Visibility(
+                  visible: _glanceType == GlanceType.Todo ? true : false,
+                  child: TodoGlance(),
+                  maintainState: true,
+                ),
               ),
               Visibility(
                 visible: _glanceType == GlanceType.Reminder ? true : false,
