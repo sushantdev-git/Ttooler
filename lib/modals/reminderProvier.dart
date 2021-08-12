@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
 
 class Reminder {
@@ -26,15 +25,6 @@ class ReminderProvider extends ChangeNotifier{
     return [..._items];
   }
 
-  bool _dateTimeCompare(DateTime rem1, DateTime rem2){
-    int res = rem1.compareTo(rem2);
-
-    if(res == 1){
-      return true;
-    }
-
-    return false;
-  }
 
 
   void addReminder({required String title, required String subtitle, required String description, required DateTime dateTime}){
