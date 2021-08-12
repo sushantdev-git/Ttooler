@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ttooler/modals/reminderProvier.dart';
-import 'package:ttooler/pages/todoPage.dart';
 import 'package:provider/provider.dart';
 import 'package:ttooler/widgets/todo/categoryList.dart';
+
+import '../customRectTween.dart';
 
 class AddReminderPopupCard extends StatefulWidget {
   /// {@macro add_todo_popup_card}
@@ -40,17 +41,17 @@ class _AddReminderPopupCardState extends State<AddReminderPopupCard> {
   void saveData() {
     final _reminder = Provider.of<ReminderProvider>(context, listen: false);
 
-    if (key == null) {
+    if (key == null) { //if key is null then we have to add
       _reminder.addReminder(
         title: title,
         description: description,
         subtitle: subtitle,
         dateTime: dateTime!,
       );
-    } else {
+    } else { //else we have to update the todo
       setState(() {
-        hero = dateTime.toString()+"Edit";
-        print(hero);
+        hero = dateTime.toString()+"Edit"; //this updated todo will going to have the same key as dateTime.toString()+"Edit"
+        //so we use to here to update the hero tag of our pop up card
       });
       _reminder.updateReminder(
         title: title,
@@ -160,7 +161,7 @@ class _AddReminderPopupCardState extends State<AddReminderPopupCard> {
     subtitle = widget.subtitle;
     description = widget.description;
     dateTime = widget.datetime;
-    key = widget.datetime != null ? widget.datetime.toString() : null;
+    key = widget.datetime != null ? widget.datetime.toString() : null; //if widget datetime is null means this pop up card is called from add todo
     hero = widget.heroTag;
   }
 
