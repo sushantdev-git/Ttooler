@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ttooler/modals/reminderProvier.dart';
+import 'package:ttooler/modals/timetableProvider.dart';
 import 'package:ttooler/modals/todoProvider.dart';
 import 'package:ttooler/pages/landingPage.dart';
-import 'package:ttooler/widgets/buttons/iconButton.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => TodoProvider(),),
-        ChangeNotifierProvider(create: (context) => ReminderProvider())
+        ChangeNotifierProvider(create: (context) => ReminderProvider()),
+        ChangeNotifierProvider(create: (context) => TimeTableProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -101,7 +102,8 @@ class MyApp extends StatelessWidget {
             ),
             hourMinuteColor: Color(0xff262A3D),
             hourMinuteTextColor: Colors.white,
-            dialHandColor: Color(0xff262A3D),
+            dialHandColor: Color(0xffb1acfa),
+            dialBackgroundColor:Color(0xff262A3D) ,
             dialTextColor: Colors.white,
             // dayPeriodColor: Color(0xff262A3D),
             dayPeriodTextColor: Colors.white,
@@ -109,6 +111,10 @@ class MyApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
             dayPeriodBorderSide: BorderSide(width: 2, color: Color(0xff262A3D)),
+            helpTextStyle: TextStyle(
+              fontSize: 13,
+              color: Color(0xff262A3D),
+            )
           ),
 
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent),
