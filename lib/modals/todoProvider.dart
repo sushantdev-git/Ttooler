@@ -3,13 +3,12 @@ import 'package:collection/collection.dart';
 
 class Todo{
   final String title;
-  late String ? subtitle;
+  late String subtitle;
   final String description;
   final String key;
-  final time = DateTime.now();
   int priority;
 
-  Todo({required this.title, this.subtitle = "", required this.description, required this.key, this.priority = 0});
+  Todo({required this.title, required this.subtitle , required this.description, required this.key,required this.priority});
 
 }
 
@@ -23,7 +22,7 @@ class TodoProvider extends ChangeNotifier{
     return [..._items];
   }
 
-  void addTodo({required String title, String ? subtitle, required String description, required int priority }){
+  void addTodo({required String title, required String subtitle, required String description, required int priority }){
     queue.add(
         Todo(title: title, description: description, subtitle: subtitle, key: DateTime.now().toString(), priority: priority)
     );
@@ -37,13 +36,24 @@ class TodoProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void editTodo({required String title, String ? subtitle, required String content, required String key}){
+   String updateTodo({required String title, required String subtitle, required String description, required String key, required int priority}){
 
-    final int index = _items.indexWhere((todo) => todo.key == key);
+    //we need the previous key to todo to remove that from the queue
+    final todo = _items.firstWhere((todo) => todo.key == key);
+    queue.remove(todo);
 
-    final Todo todo = _items[index];
+    //and then we create a new todo so it need a new key and new key will be current dateTime
 
-    _items.insert(index, Todo(title: title, description: content, key: key, subtitle: subtitle));
+    final keytoReturn = DateTime.now().toString();
+
+    queue.add(Todo(title: title, subtitle: subtitle, description: description, key: keytoReturn, priority: priority));
+
+    _items = queue.toList();
+
+    notifyListeners();
+
+    //and we return this key so we can change hero tag of edit button in todoinput card.
+    return keytoReturn;
   }
 
   void printQueue(){
@@ -52,7 +62,6 @@ class TodoProvider extends ChangeNotifier{
     for(int i=0; i<temp.length; i++){
       print(temp[i].title);
       print(temp[i].priority);
-      print(temp[i].time.month);
     }
   }
 }
