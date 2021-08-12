@@ -10,8 +10,11 @@ class TodoCard extends StatelessWidget {
   final String subtitle;
   final String description;
   final int index;
+  final int priority;
+  final String heroKey;
+  final String? todoKey;
 
-  TodoCard({required this.title, required this.subtitle, required this.description, required this.index});
+  TodoCard({required this.title, required this.subtitle, required this.description, required this.index, required this.priority, required this.heroKey, required this.todoKey});
 
   @override
   Widget build(BuildContext context) {
@@ -47,28 +50,32 @@ class TodoCard extends StatelessWidget {
           textColor: Colors.white,
           iconColor: Colors.white,
           title: Text(title, style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w700
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+              // color: Colors.white70
           ),),
           subtitle: Text(subtitle, style: TextStyle(
-            fontSize: 18,
+            fontSize: 17,
+              // color: Colors.white70
           ),),
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(description, softWrap: true,),
+            Text(description, softWrap: true, style: TextStyle(
+              // color: Colors.white70
+            ),),
             SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                BorderIconButton(icon: Icons.check, onPress: (){}, belongTo: "TodoCheck", type: "Check", index: index,),
+                BorderIconButton(icon: Icons.check, onPress: (){}, belongTo: heroKey, type: "Check"),
                 SizedBox(width: 10,),
                 BorderIconButton(icon: Icons.edit, onPress: (String heroTag){
                   Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-                    return AddTodoPopupCard(heroTag: heroTag,);
+                    return AddTodoPopupCard(heroTag: heroTag, cardTitle: "Edit", title: title, subtitle:  subtitle, description:  description, priority:  priority.toDouble(), todoKey: todoKey,);
                   },));
-                }, belongTo: "TodoEdit", type: "Edit", index: index,),
+                }, belongTo: heroKey, type: "Edit",),
                 SizedBox(width: 10,),
-                BorderIconButton(icon: Icons.delete, onPress: (){}, belongTo: "TodoDelete", type: "Delete", index: index,),
+                BorderIconButton(icon: Icons.delete, onPress: (){}, belongTo: heroKey, type: "Delete"),
               ],
             ),
           ],

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ttooler/pageRoutebuilder/heroPageRouteBuilder.dart';
-import 'package:ttooler/pages/todoPage.dart';
 import 'package:ttooler/widgets/todo/todoinputcard.dart';
+
+import '../customRectTween.dart';
 
 class TodoFloatingAB extends StatelessWidget {
   const TodoFloatingAB({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class TodoFloatingAB extends StatelessWidget {
     return Padding(padding: EdgeInsets.all(10), child: GestureDetector(
       onTap: (){
         Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-          return AddTodoPopupCard(heroTag: "TodoButton",);
+          return AddTodoPopupCard(heroTag: "TodoButton", cardTitle: "Add", title: "", subtitle: "", description: "", priority: 1, todoKey: null,);
         },));
       },
       child: Hero(

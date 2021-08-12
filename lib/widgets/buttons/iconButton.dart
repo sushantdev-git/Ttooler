@@ -7,14 +7,12 @@ class BorderIconButton extends StatelessWidget {
   final IconData icon;
   final String belongTo;
   final String type;
-  final int index;
-  const BorderIconButton({required this.icon, required this.onPress, required this.belongTo, required this.type, required this.index});
+  const BorderIconButton({required this.icon, required this.onPress, required this.belongTo, required this.type});
 
 
   @override 
   Widget build(BuildContext context) {
     final String heroTag = belongTo+type;
-    print(heroTag);
     return InkWell(
       borderRadius: BorderRadius.circular(100),
       onTap: (){

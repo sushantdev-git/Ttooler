@@ -58,13 +58,13 @@ class ReminderCard extends StatelessWidget {
                   fontWeight: FontWeight.w100
               ),),
               Text(title, style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700
               ),),
             ],
           ),
           subtitle: Text(subtitle, style: TextStyle(
-            fontSize: 18,
+            fontSize: 17,
           ),),
           children: [
             Text(description, softWrap: true,),
@@ -83,9 +83,9 @@ class ReminderCard extends StatelessWidget {
                       cardTitle: "Edit",
                     );
                   },));
-                }, belongTo: heroKey, type: "Edit", index : index),
+                }, belongTo: heroKey, type: "Edit"),
                 SizedBox(width: 10,),
-                BorderIconButton(icon: Icons.delete, onPress: (){}, belongTo: heroKey,type: "Delete" ,index : index),
+                BorderIconButton(icon: Icons.delete, onPress: (){}, belongTo: heroKey,type: "Delete" ),
               ],
             ),
           ],

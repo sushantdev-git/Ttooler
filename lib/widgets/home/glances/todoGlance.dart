@@ -16,7 +16,7 @@ class TodoGlance extends StatelessWidget {
     List<Widget> _todo= [];
 
     for(int i=0; i<min(todoData.length, 4); i++){
-      _todo.add(TodoCard(title: todoData[i].title, subtitle: todoData[i].subtitle!, description: todoData[i].description, index: i,));
+      _todo.add(TodoCard(title: todoData[i].title, subtitle: todoData[i].subtitle, description: todoData[i].description, index: i, priority: todoData[i].priority, heroKey: todoData[i].key, todoKey: todoData[i].key,));
     }
 
     return _todo;

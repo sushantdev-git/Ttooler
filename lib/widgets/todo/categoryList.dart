@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ttooler/pages/todoPage.dart';
 
 
 class CategoryList extends StatelessWidget {

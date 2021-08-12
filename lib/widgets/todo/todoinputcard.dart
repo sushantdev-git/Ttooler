@@ -1,48 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:ttooler/modals/todoProvider.dart';
-import 'package:ttooler/pages/todoPage.dart';
 import 'package:provider/provider.dart';
 import 'package:ttooler/widgets/todo/categoryList.dart';
+import '../customRectTween.dart';
 
 class AddTodoPopupCard extends StatefulWidget {
   /// {@macro add_todo_popup_card}
-  final String heroTag;
-  AddTodoPopupCard({required this.heroTag, Key? key}) : super(key: key);
+  late final String heroTag;
+  final String cardTitle;
+  final String title;
+  final String subtitle;
+  final String description;
+  final double priority;
+  final String ? todoKey;
+  AddTodoPopupCard({required this.heroTag, required this.cardTitle, required this.title, required this.subtitle, required this.description, required this.priority, required this.todoKey, Key? key}) : super(key: key);
 
   @override
   _AddTodoPopupCardState createState() => _AddTodoPopupCardState();
 }
 
 class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
-  late GlobalKey<FormState> _form = GlobalKey<FormState>();
-  final _titleTextController = TextEditingController();
-  final _subtitleTextController = TextEditingController();
-  final _descriptionTextController = TextEditingController();
+  String title = "";
+  String subtitle = "";
+  String description = "";
+  String? key;
+  late String hero;
 
-  double _slideValue = 1;
+  double priority = 1;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    // _form.currentState!.dispose();
-    super.dispose();
-  }
 
   void saveData() {
     final _todos = Provider.of<TodoProvider>(context, listen: false);
-    _todos.addTodo(
-        title: _titleTextController.text,
-        description: _descriptionTextController.text,
-        subtitle: _subtitleTextController.text,
-      priority: _slideValue.toInt(),
-    );
+    if(widget.cardTitle == "Add") {
+      _todos.addTodo(
+        title: title,
+        description: description,
+        subtitle: subtitle,
+        priority: priority.toInt(),
+      );
+    }
+    else{
+      setState(() {
+        hero = _todos.updateTodo(title: title, description: description, subtitle: subtitle, key: widget.todoKey!, priority: priority.toInt())+"Edit";
+      });
+    }
     Navigator.of(context).pop();
+  }
+
+  void validation() {
+
+    if (title.length <= 3) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Title length must be 3"),
+          duration: Duration(milliseconds: 400),
+        ),
+      );
+      return;
+    } else if (subtitle.length <= 5) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Subtitle length must be 5"),
+        duration: Duration(milliseconds: 400),
+      ));
+      return;
+    } else if (description.length <= 10) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Description length must be 10"),
+        duration: Duration(milliseconds: 400),
+      ));
+      return;
+    }
+
+    saveData();
+  }
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    title = widget.title;
+    subtitle = widget.subtitle;
+    description = widget.description;
+    hero = widget.heroTag;
+    priority = widget.priority;
   }
 
   @override
@@ -55,7 +94,7 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
         child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Hero(
-            tag: widget.heroTag,
+            tag: hero,
             createRectTween: (begin, end) {
               return CustomRectTween(begin: begin as Rect, end: end as Rect);
             },
@@ -77,7 +116,7 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Enter Todo",
+                            "${widget.cardTitle} Todo",
                             style: TextStyle(
                               fontSize: 25,
                               color: Color(0xff262A3D),
@@ -94,12 +133,15 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: TextFormField(
                               style: TextStyle(color: Colors.white),
+                              initialValue: title,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 labelText: "Title",
                               ),
                               cursorColor: Colors.white,
-                              controller: _titleTextController,
+                              onChanged: (value){
+                                title = value;
+                              },
                             ),
                           ),
                           SizedBox(
@@ -112,12 +154,15 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: TextFormField(
                               style: TextStyle(color: Colors.white),
+                              initialValue: subtitle,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 labelText: "Subtitle",
                               ),
                               cursorColor: Colors.white,
-                              controller: _subtitleTextController,
+                              onChanged: (value){
+                                subtitle = value;
+                              },
                             ),
                           ),
                           SizedBox(
@@ -130,12 +175,15 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: TextFormField(
                               style: TextStyle(color: Colors.white),
+                              initialValue: description,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   labelText: "Description"),
                               cursorColor: Colors.white,
                               maxLines: null,
-                              controller: _descriptionTextController,
+                              onChanged: (value){
+                                description = value;
+                              },
                             ),
                           ),
                           SizedBox(
@@ -149,14 +197,14 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                             activeColor: Color(0xff181920),
                             onChanged: (value){
                                 setState(() {
-                                  _slideValue = value;
+                                  priority = value;
                                 });
                             },
-                            value: _slideValue,
+                            value: priority,
                             divisions: 10,
                             min: 0,
                             max: 10,
-                            label: "${_slideValue.toInt()}",
+                            label: "${priority.toInt()}",
 
                           ),
                           FittedBox(
@@ -174,38 +222,7 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
-                                      if (_titleTextController.text.length <=
-                                          2) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content:
-                                                    Text("Enter valid title"),
-                                            duration: Duration(milliseconds: 400),
-                                          ),
-                                        );
-                                        return;
-                                      } else if (_subtitleTextController
-                                              .text.length <=
-                                          4) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    "Enter valid subtitle"),
-                                          duration: Duration(milliseconds: 400),
-                                        ));
-                                        return;
-                                      } else if (_descriptionTextController
-                                              .text.length <=
-                                          10) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    "Enter valid description"),
-                                          duration: Duration(milliseconds: 400),
-                                        ));
-                                        return;
-                                      }
-                                      saveData();
+                                      validation();
                                     },
                                     child: Text("Ok"),),
                               ],

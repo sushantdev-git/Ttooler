@@ -19,7 +19,6 @@ class _ReminderPageState extends State<ReminderPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final _reminder = Provider.of<ReminderProvider>(context).items;
 
     return Scaffold(

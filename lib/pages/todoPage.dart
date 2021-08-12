@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ttooler/modals/todoProvider.dart';
 import 'package:ttooler/widgets/todo/todoFAB.dart';
@@ -41,10 +40,13 @@ class TodoPage extends StatelessWidget {
           return Column(
             children: [
               TodoCard(title: _todos.items[index].title,
-                subtitle: _todos.items[index].subtitle!,
+                subtitle: _todos.items[index].subtitle ,
                 description: _todos.items[index].description,
+                priority: _todos.items[index].priority,
+                heroKey: _todos.items[index].key,
+                todoKey: _todos.items[index].key,
                 index: index,),
-              if(index == _todos.items.length -1 ) Container( height: 100,child: Center(child: Text("The end"))),
+              if(index == _todos.items.length -1 ) Container( height: 100,),
             ],
           );
         },
@@ -55,21 +57,3 @@ class TodoPage extends StatelessWidget {
 }
 
 
-class CustomRectTween extends RectTween {
-  /// {@macro custom_rect_tween}
-  CustomRectTween({
-    required Rect begin,
-    required Rect end,
-  }) : super(begin: begin, end: end);
-
-  @override
-  Rect lerp(double t) {
-    final elasticCurveValue = Curves.easeOut.transform(t);
-    return Rect.fromLTRB(
-      lerpDouble(begin!.left, end!.left, elasticCurveValue) as double,
-      lerpDouble(begin!.top, end!.top, elasticCurveValue) as double,
-      lerpDouble(begin!.right, end!.right, elasticCurveValue) as double,
-      lerpDouble(begin!.bottom, end!.bottom, elasticCurveValue) as double,
-    );
-  }
-}

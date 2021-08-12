@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:ttooler/konstant/konstant.dart';
-import 'package:ttooler/modals/todoProvider.dart';
 import 'package:ttooler/pageRoutebuilder/customPageRouteBuilder.dart';
 import 'package:ttooler/pages/aboutPage.dart';
 import 'package:ttooler/pages/bookshelfPage.dart';
@@ -85,7 +83,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
-    final _todo = Provider.of<TodoProvider>(context);
     return SafeArea(
       child: Scaffold(
         extendBody: true,
