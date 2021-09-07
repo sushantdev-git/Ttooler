@@ -18,30 +18,30 @@ class DrawerWidget extends StatelessWidget {
         child: ListView(
           physics:  ClampingScrollPhysics(), //this will remove the expand scroll to top animation in list view
           children: [
-            Container(
-              height: 150,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color(0xffA1B1DC),
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black38,
-                    offset: Offset(0.0, 1.0), //(x,y)
-                    blurRadius: 5.0,
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   height: 150,
+            //   width: double.infinity,
+            //   decoration: BoxDecoration(
+            //     color: Color(0xffA1B1DC),
+            //     borderRadius: BorderRadius.circular(15),
+            //     boxShadow: [
+            //       BoxShadow(
+            //         color: Colors.black38,
+            //         offset: Offset(0.0, 1.0), //(x,y)
+            //         blurRadius: 5.0,
+            //       ),
+            //     ],
+            //   ),
+            // ),
             const SizedBox(height: 10,),
-            DrawerItem(page: PageName.HomePage, iconAddress: "assets/images/icon_images/home.png", title: "Home", pushPage: pushPage,),
+            // DrawerItem(page: PageName.HomePage, iconAddress: "assets/images/icon_images/home.png", title: "Home", pushPage: pushPage,),
             DrawerItem(page: PageName.Todo, iconAddress: "assets/images/icon_images/todo_icon.png", title: "Todo", pushPage: pushPage,),
             DrawerItem(page: PageName.Reminder, iconAddress: "assets/images/icon_images/reminder1.png", title: "Reminder", pushPage: pushPage,),
             DrawerItem(page: PageName.TimeTable,iconAddress: "assets/images/icon_images/calender.png", title: "TimeTable", pushPage: pushPage,),
-            Divider(height: 20, thickness: 1, color: Colors.white,),
-            DrawerItem(page: PageName.BookShelf,iconAddress: "assets/images/icon_images/bookIcon.png", title: "BookShelf", pushPage: pushPage,),
-            Divider(height: 20, thickness: 1, color: Colors.white,),
-            DrawerItem(page: PageName.About, iconAddress: "assets/images/icon_images/mug_.png", title: "About", pushPage: pushPage,),
+            // Divider(height: 20, thickness: 1, color: Colors.white,),
+            // DrawerItem(page: PageName.BookShelf,iconAddress: "assets/images/icon_images/bookIcon.png", title: "BookShelf", pushPage: pushPage,),
+            // Divider(height: 20, thickness: 1, color: Colors.white,),
+            DrawerItem(page: PageName.About, iconAddress: "assets/images/illustration/mug_.png", title: "About", pushPage: pushPage,),
           ],
         )
       )
