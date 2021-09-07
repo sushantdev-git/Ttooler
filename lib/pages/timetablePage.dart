@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:ttooler/modals/timetableProvider.dart';
+import 'package:ttooler/pageRoutebuilder/heroPageRouteBuilder.dart';
+import 'package:ttooler/widgets/timetable/stats.dart';
 import 'package:ttooler/widgets/timetable/timetableFAB.dart';
 import 'package:ttooler/widgets/timetable/timetableTimelineBuilder.dart';
 
@@ -23,37 +26,14 @@ class _TimetablePageState extends State<TimetablePage>
 
   bool isDayChangerOpen = false;
 
-  String day = "M";
 
   String dayName = "Monday";
 
-  String getNameOfDay(String day) {
-    switch (day) {
-      case "M":
-        return "Monday";
-      case "T":
-        return "Tuesday";
-      case "W":
-        return "Wednesday";
-      case "Th":
-        return "Thursday";
-      case "F":
-        return "Friday";
-      case "St":
-        return "Saturday";
-      default:
-        return "Sunday";
-    }
-  }
 
-  void changeDay(String dayss) {
-    print("Hello $dayss");
+  void changeDay(String day) {
     setState(() {
-      day = dayss;
-      dayName = getNameOfDay(day);
+      dayName = day;
     });
-
-    print(day);
   }
 
   void slideInOutDaySwitcher() {
@@ -76,6 +56,8 @@ class _TimetablePageState extends State<TimetablePage>
     _slideAnimation.addListener(() {
       setState(() {});
     });
+    final now = DateTime.now();
+    dayName = DateFormat("EEEE").format(now);
     super.initState();
   }
 
@@ -84,9 +66,12 @@ class _TimetablePageState extends State<TimetablePage>
     final _timetable = Provider.of<TimeTableProvider>(context);
 
     return Scaffold(
+      floatingActionButton: TimetableFloatingAB(
+        currentDay: dayName,
+      ),
       appBar: AppBar(
         titleSpacing: 0,
-        elevation: 0,
+        elevation: 1,
         title: Row(
           children: [
             Container(
@@ -107,196 +92,141 @@ class _TimetablePageState extends State<TimetablePage>
             ),
           ],
         ),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+              return Statistics(onPress: changeDay, day: dayName,);
+            },));
+          }, icon: Icon(Icons.insights, color: Colors.white,)),
+          IconButton(onPressed: (){
+            Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+              return DayPicker(onPress: changeDay);
+            },));
+          }, icon: Icon(Icons.calendar_today, color: Colors.white,))
+        ],
       ),
-      floatingActionButton: TimetableFloatingAB(
-        currentDay: getNameOfDay(day),
-      ),
-      body: Stack(
-        children: [
-          if (_timetable.getListOfTimeTable(day).length <= 5)
-            Container(
-              height: MediaQuery.of(context).size.height,
-            ),
-          TimetableTimelineBuilder(
-            items: _timetable.getListOfTimeTable(dayName),
-            leftPadding: 20,
-            rightPadding: 20,
-            where: "main",
-            day: dayName,
-          ),
-          Positioned(
-            top: 5,
-            right: 0,
-            child: Container(
-                height: 40,
-                width: 35,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      bottomLeft: Radius.circular(30)),
-                  color: Theme.of(context).accentColor,
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    slideInOutDaySwitcher();
-                  },
-                  icon: Icon(
-                    isDayChangerOpen
-                        ? Icons.navigate_next
-                        : Icons.navigate_before,
-                    color: Colors.white,
-                  ),
-                )),
-          ),
-          Positioned(
-            top: 70,
-            right: _slideAnimation.value,
-            child: Material(
-              elevation: 5,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  bottomLeft: Radius.circular(20)),
+      body: TimetableTimelineBuilder(
+          items: _timetable.getListOfTimeTable(dayName, "mainpage"),
+          leftPadding: 20,
+          rightPadding: 20,
+          where: "main",
+          day: dayName,
+        ),
+      );
+  }
+}
+
+class DayPicker extends StatelessWidget {
+  final Function onPress;
+  const DayPicker({
+    required this.onPress,
+    Key? key
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final minW = MediaQuery.of(context).size.width/4 <= 90;
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        margin: EdgeInsets.only(top: 100),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Flexible(
               child: Container(
-                padding:
-                    EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
-                width: 70,
+                width: MediaQuery.of(context).size.width,
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * (2 / 3),
-                ),
+                    maxHeight: MediaQuery.of(context).size.height * (0.7)),
                 decoration: BoxDecoration(
                     color: Theme.of(context).accentColor,
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        bottomLeft: Radius.circular(20))),
-                child: DayTileScroll(
-                  changeDay: changeDay,
-                  slide: slideInOutDaySwitcher,
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15))),
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Pick Day", style: TextStyle(
+                                fontSize: 25,
+                                color: Color(0xff262A3D),
+                              ),),
+                              Text("pick a day to see the schedule.", style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xff262A3D),
+                                fontStyle: FontStyle.italic,
+                              ),),
+                              SizedBox(height: 20,),
+                              GridView(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                padding: EdgeInsets.only(bottom: 20, right: 10, left: 5),
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20,
+                                ),
+                                children: [
+                                  ElevatedButton(onPressed: (){
+                                    onPress("Monday"); Navigator.of(context).pop();
+                                    print(MediaQuery.of(context).size.width);
+                                  }, child: minW ? Text("M") : Text("Mon")),
+                                  ElevatedButton(onPressed: (){onPress("Tuesday");Navigator.of(context).pop();}, child:  minW ? Text("T") : Text("Tue") ),
+                                  ElevatedButton(onPressed: (){onPress("Wednesday");Navigator.of(context).pop();}, child: minW ?  Text("W"): Text("Wed")),
+                                  ElevatedButton(onPressed: (){onPress("Thursday");Navigator.of(context).pop();}, child: minW ? Text("Th"):Text("Thu")),
+                                  ElevatedButton(onPressed: (){onPress("Friday");Navigator.of(context).pop();}, child: minW ? Text("F"):Text("Fri")),
+                                  ElevatedButton(onPressed: (){onPress("Saturday");Navigator.of(context).pop();}, child: minW ? Text("St"):Text("Sat")),
+                                  ElevatedButton(onPressed: (){onPress("Sunday");Navigator.of(context).pop();}, child: minW ? Text("S"): Text("Sun")),
+                                  Center(child: Text("🚴", style: TextStyle(
+                                      fontSize: minW ? 35: 50,
+                                      shadows: [
+                                    Shadow(
+                                      color: Colors.black26,
+                                      blurRadius: 5,
+                                      offset: Offset(1,1)
+                                    )
+                                  ]),))
+                                ],
+                              ),
+                            ],
+                          ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: IconButton(
+                        onPressed: () {
+                          print("hello");
+                          Navigator.of(context).pop();
+                        },
+                        icon: Material(
+                          borderRadius: BorderRadius.circular(20),
+                          elevation: 5,
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).backgroundColor,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Icon(
+                              Icons.clear,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class DayTileScroll extends StatelessWidget {
-  final Function changeDay;
-  final Function slide;
-  const DayTileScroll({
-    required this.changeDay,
-    required this.slide,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        SizedBox(
-          height: 10,
-        ),
-        DayTile(
-          day: "M",
-          changeDay: changeDay,
-          slide: slide,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        DayTile(
-          day: "T",
-          changeDay: changeDay,
-          slide: slide,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        DayTile(
-          day: "W",
-          changeDay: changeDay,
-          slide: slide,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        DayTile(
-          day: "Th",
-          changeDay: changeDay,
-          slide: slide,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        DayTile(
-          day: "F",
-          changeDay: changeDay,
-          slide: slide,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        DayTile(
-          day: "St",
-          changeDay: changeDay,
-          slide: slide,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        DayTile(
-          day: "S",
-          changeDay: changeDay,
-          slide: slide,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-      ],
-    );
-  }
-}
-
-class DayTile extends StatelessWidget {
-  final String day;
-  final Function changeDay;
-  final Function slide;
-  const DayTile({
-    required this.day,
-    required this.changeDay,
-    required this.slide,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        changeDay(day);
-        slide();
-      },
-      child: Material(
-        elevation: 3,
-        borderRadius: BorderRadius.circular(10),
-        child: Container(
-          height: 50,
-          width: 50,
-          decoration: BoxDecoration(
-            color: Theme.of(context).backgroundColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Center(
-            child: Text(
-              "$day",
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 24,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          ],
         ),
       ),
     );
