@@ -43,7 +43,7 @@ class LandingPage extends StatelessWidget {
                     width: mediaQuery.size.height / 3,
                     child: Center(
                       child: Image.asset(
-                        "assets/images/tree.png",
+                        "assets/images/illustration/tree.png",
                         fit: BoxFit.cover,
                       ),
                     ),
