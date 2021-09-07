@@ -12,11 +12,18 @@ import 'package:ttooler/widgets/todo/tododisplaycard.dart';
 
 class TodoGlance extends StatelessWidget {
 
-  List<Widget> getTodo(List<Todo> todoData){
+  List<Widget> getTodo(List<Todo> todoData, var todo){
     List<Widget> _todo= [];
 
-    for(int i=0; i<min(todoData.length, 4); i++){
-      _todo.add(TodoCard(title: todoData[i].title, subtitle: todoData[i].subtitle, description: todoData[i].description, index: i, priority: todoData[i].priority, heroKey: todoData[i].key, todoKey: todoData[i].key,));
+    for(int i=-1; i<min(todoData.length, 4); i++){
+      if(i == -1 ) {
+        _todo.add(Text(
+          "Completed ${todo.countCompleted()}/${todo.items.length}",
+          style: TextStyle(fontSize: 17),
+        ),);
+        continue;
+      }
+      _todo.add(TodoCard(title: todoData[i].title,  description: todoData[i].description, index: i, priority: todoData[i].priority, todoKey: todoData[i].id, isCompleted: todoData[i].isCompleted, category: todoData[i].category,));
     }
 
     return _todo;
@@ -35,7 +42,8 @@ class TodoGlance extends StatelessWidget {
           _todos.items.length != 0 ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ...getTodo(_todos.items),
+              SizedBox(height: 10,),
+              ...getTodo(_todos.items, _todos),
               TextButton(onPressed: (){
                 Navigator.of(context).push(CustomPageRouteBuilder(enterPage: TodoPage(), exitPage: HomePage()));
               }, child: Row(
