@@ -1,17 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ttooler/konstant/konstant.dart';
 
 
 class CategoryList extends StatelessWidget {
-  CategoryList({Key? key}) : super(key: key);
-
-  final List<String> _imageAddress = [
-    "assets/images/illustration/tree.png",
-    "assets/images/illustration/phone.png",
-    "assets/images/illustration/pi.png",
-    "assets/images/illustration/burger.png",
-    "assets/images/illustration/football.png",
-  ];
+  final Function onPress;
+  CategoryList({
+    required this.onPress,
+    Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +31,33 @@ class CategoryList extends StatelessWidget {
             GridView.builder(
               shrinkWrap: true,
               physics: BouncingScrollPhysics(),
-              gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 20, crossAxisSpacing: 20) ,
+              gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 20) ,
               itemBuilder: (context, ind){
               return TextButton(
-                onPressed: (){},
+                onPressed: (){
+                  onPress(TypeCategory.values.elementAt(ind));
+                  Navigator.of(context).pop();
+                },
                 child: Container(
-                  child: Image.asset(_imageAddress[ind], fit: BoxFit.contain,),
+                  child: Column(
+                    children: [
+                      Container(
+                          decoration:BoxDecoration(
+                            borderRadius: BorderRadius.circular(10)
+                         ),
+                          clipBehavior: Clip.antiAlias,
+                          child: Image.asset(getTypeCategoryAddress(TypeCategory.values.elementAt(ind)), fit: BoxFit.contain, height: 70, )),
+                      Text("${getTypeCategoryName(TypeCategory.values.elementAt(ind))}", style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w100,
+                        color: Colors.white,
+                      ),)
+                    ],
+                  ),
                 ),
               );
             },
-              itemCount: _imageAddress.length,
+              itemCount: TypeCategory.values.length,
             ),
           ],
         ),
