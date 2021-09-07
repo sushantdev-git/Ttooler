@@ -1,6 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ttooler/konstant/konstant.dart';
+import 'package:ttooler/modals/reminderProvier.dart';
+import 'package:ttooler/modals/timetableProvider.dart';
+import 'package:ttooler/modals/todoProvider.dart';
 import 'package:ttooler/pageRoutebuilder/customPageRouteBuilder.dart';
 import 'package:ttooler/pages/aboutPage.dart';
 import 'package:ttooler/pages/bookshelfPage.dart';
@@ -63,7 +69,7 @@ class _HomePageState extends State<HomePage> {
 
   GlanceType _glanceType = GlanceType.Todo;
 
-  void setGlaceType(int index){
+  void setGlaceType(int index) {
     _bottomNavigationSelectedIndex = index;
     if (index == 0) {
       setState(() {
@@ -78,109 +84,122 @@ class _HomePageState extends State<HomePage> {
         _glanceType = GlanceType.TimeTable;
       });
     }
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Timer.periodic(Duration(minutes: 5), (timer) {
+      setState(() {
+
+      });
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        key: _scaffoldKey,
-        appBar: AppBar(
-          elevation: 0,
-          leading: InkWell(
-            child: const HamburgerButton(),
-            onTap: () {
-              _scaffoldKey.currentState!.openDrawer();
-            },
-            borderRadius: BorderRadius.circular(10),
-            highlightColor: Colors
-                .transparent, //this line will remove the highlight color of inkwell
+      child:Scaffold(
+          extendBody: true,
+          key: _scaffoldKey,
+          drawer: DrawerWidget(
+            pushPage: pushPageUtil,
           ),
-        ),
-        drawer: DrawerWidget(
-          pushPage: pushPageUtil,
-        ),
-        //here added bottom navigation bar
-        bottomNavigationBar: CurvedNavigationBar(
-          animationDuration: Duration(milliseconds: 500),
-          backgroundColor: Colors.transparent,
-          index: _bottomNavigationSelectedIndex,
-          buttonBackgroundColor: Color(0xffb1acfa),
-          color: Color(0xff464D65),
-          items: [
-            Container(
-              height: 35,
-              child: Image.asset(
-                "assets/images/icon_images/todo_icon.png",
-                fit: BoxFit.cover,
-              ),
+          appBar: AppBar(
+            toolbarHeight: 45,
+            elevation: 1,
+            leading: InkWell(
+              child: const HamburgerButton(),
+              onTap: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
+              borderRadius: BorderRadius.circular(10),
+              highlightColor: Colors
+                  .transparent, //this line will remove the highlight color of inkwell
             ),
-            Container(
-              height: 35,
-              child: Image.asset(
-                "assets/images/icon_images/reminder1.png",
-                fit: BoxFit.cover,
-              ),
-            ),
-            Container(
-              height: 35,
-              child: Image.asset(
-                "assets/images/icon_images/calender.png",
-                fit: BoxFit.cover,
-              ),
-            ),
-          ],
-          onTap: setGlaceType,
-        ),
-
-        body: Container(
-          height: mediaQuery.height,
-          width: mediaQuery.width,
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(children: [
+          ),
+          //here added bottom navigation bar
+          bottomNavigationBar: CurvedNavigationBar(
+            height: 55,
+            animationDuration: Duration(milliseconds: 500),
+            backgroundColor: Colors.transparent,
+            index: _bottomNavigationSelectedIndex,
+            buttonBackgroundColor: Color(0xffb1acfa),
+            color: Color(0xff464D65),
+            items: [
               Container(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const InfoGreeting(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Text(
-                      "At Glance,",
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
+                height: 35,
+                child: Image.asset(
+                  "assets/images/icon_images/todo_icon.png",
+                  fit: BoxFit.cover,
                 ),
               ),
-              GestureDetector(
-
-                child: Visibility(
-                  visible: _glanceType == GlanceType.Todo ? true : false,
-                  child: TodoGlance(),
-                  maintainState: true,
+              Container(
+                height: 35,
+                child: Image.asset(
+                  "assets/images/icon_images/reminder1.png",
+                  fit: BoxFit.cover,
                 ),
               ),
-              Visibility(
-                visible: _glanceType == GlanceType.Reminder ? true : false,
-                child: ReminderGlance(),
-                maintainState: true,
+              Container(
+                height: 35,
+                child: Image.asset(
+                  "assets/images/icon_images/calender.png",
+                  fit: BoxFit.cover,
+                ),
               ),
-              Visibility(
-                visible: _glanceType == GlanceType.TimeTable ? true : false,
-                child: TimetableGlance(),
-                maintainState: true,
-              ),
-            ]),
+            ],
+            onTap: setGlaceType,
           ),
-        ),
-      ),
-    );
+
+          body: Container(
+              height: mediaQuery.height,
+              width: mediaQuery.width,
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  // mainAxisSize: MainAxisSize.min,
+                    children: [
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                         InfoGreeting(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          "At Glance",
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: _glanceType == GlanceType.Todo ? true : false,
+                    child: TodoGlance(),
+                    maintainState: true,
+                  ),
+                  Visibility(
+                    visible: _glanceType == GlanceType.Reminder ? true : false,
+                    child: ReminderGlance(),
+                    maintainState: true,
+                  ),
+                  Visibility(
+                    visible: _glanceType == GlanceType.TimeTable ? true : false,
+                    child: TimetableGlance(),
+                    maintainState: true,
+                  ),
+                ]),
+              ),
+            ),
+          ),
+        );
   }
 }
