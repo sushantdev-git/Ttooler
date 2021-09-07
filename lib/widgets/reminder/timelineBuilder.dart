@@ -62,11 +62,10 @@ class TimelineBuilder extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 40.0),
                     child: ReminderCard(
                       title: items[index].title,
-                      subtitle: items[index].subtitle,
                       description: items[index].description,
                       dateTime: items[index].dateTime,
                       index: index,
-                      heroKey: items[index].key,
+                      id: items[index].id,
                     ),),
                 new Positioned(
                   top: index == 0 ||

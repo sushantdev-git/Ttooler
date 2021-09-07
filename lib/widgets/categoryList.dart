@@ -6,12 +6,11 @@ class CategoryList extends StatelessWidget {
   CategoryList({Key? key}) : super(key: key);
 
   final List<String> _imageAddress = [
-    "assets/images/tree.png",
-    "assets/images/icon_images/mug_.png",
-    "assets/images/icon_images/bookIcon.png",
-    "assets/images/icon_images/reminder1.png",
-    "assets/images/icon_images/todo_icon.png",
-    "assets/images/icon_images/calender.png"
+    "assets/images/illustration/tree.png",
+    "assets/images/illustration/phone.png",
+    "assets/images/illustration/pi.png",
+    "assets/images/illustration/burger.png",
+    "assets/images/illustration/football.png",
   ];
 
   @override
@@ -36,23 +35,15 @@ class CategoryList extends StatelessWidget {
             GridView.builder(
               shrinkWrap: true,
               physics: BouncingScrollPhysics(),
-              gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 20, crossAxisSpacing: 20) ,
+              gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 20, crossAxisSpacing: 20) ,
               itemBuilder: (context, ind){
-              return Container(
-                child: Image.asset(_imageAddress[ind], fit: BoxFit.contain,),
+              return TextButton(
+                onPressed: (){},
+                child: Container(
+                  child: Image.asset(_imageAddress[ind], fit: BoxFit.contain,),
+                ),
               );
             },
-              itemCount: _imageAddress.length,
-            ),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 20, crossAxisSpacing: 20) ,
-              itemBuilder: (context, ind){
-                return Container(
-                  child: Image.asset(_imageAddress[ind], fit: BoxFit.contain,),
-                );
-              },
               itemCount: _imageAddress.length,
             ),
           ],
