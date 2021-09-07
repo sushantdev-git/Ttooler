@@ -1,15 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:ttooler/modals/reminderProvier.dart';
 import 'package:ttooler/modals/timetableProvider.dart';
 import 'package:ttooler/modals/todoProvider.dart';
-import 'package:ttooler/pages/landingPage.dart';
+import 'package:ttooler/pages/splashPage.dart';
 
-void main() {
+import 'notification/notifications.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   //this will prevent to change orientation of app.
+  await Notifications.init();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
     runApp(new MyApp());
   });
@@ -38,6 +44,7 @@ class MyApp extends StatelessWidget {
           accentColor: Color(0xffb1acfa),
           backgroundColor: Color(0xff262A3D),
           canvasColor: Color(0xff181920),
+          // canvasColor: Colors.white,
           fontFamily: "OpenSans",
           textTheme: TextTheme(
             bodyText1: TextStyle(),
@@ -62,7 +69,7 @@ class MyApp extends StatelessWidget {
               )
           ),
           inputDecorationTheme: InputDecorationTheme(
-            contentPadding: EdgeInsets.all(15),
+            // contentPadding: EdgeInsets.all(15),
               labelStyle: TextStyle(
                   color: Colors.white
               ),
@@ -105,15 +112,19 @@ class MyApp extends StatelessWidget {
             dialHandColor: Color(0xffb1acfa),
             dialBackgroundColor:Color(0xff262A3D) ,
             dialTextColor: Colors.white,
-            // dayPeriodColor: Color(0xff262A3D),
-            dayPeriodTextColor: Colors.white,
+            dayPeriodTextColor: Colors.black,
             dayPeriodShape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
             ),
-            dayPeriodBorderSide: BorderSide(width: 2, color: Color(0xff262A3D)),
+            dayPeriodBorderSide: BorderSide(width: 1),
             helpTextStyle: TextStyle(
-              fontSize: 13,
+              fontSize: 15,
               color: Color(0xff262A3D),
+              fontStyle: FontStyle.italic,
+            ),
+            dayPeriodTextStyle: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
             )
           ),
 
