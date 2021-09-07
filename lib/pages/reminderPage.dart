@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ttooler/modals/reminderProvier.dart';
 import 'package:ttooler/widgets/reminder/reminderFAB.dart';
-import 'package:ttooler/widgets/timelineBuilder.dart';
+import 'package:ttooler/widgets/reminder/timelineBuilder.dart';
 
 class ReminderPage extends StatefulWidget {
   const ReminderPage({Key? key}) : super(key: key);
@@ -22,8 +22,9 @@ class _ReminderPageState extends State<ReminderPage> {
     final _reminder = Provider.of<ReminderProvider>(context).items;
 
     return Scaffold(
+      floatingActionButton: ReminderFloatingAB(),
       appBar: AppBar(
-        elevation: 0,
+        elevation: 1,
         titleSpacing: 0,
         title: Row(
           children: [
@@ -46,12 +47,11 @@ class _ReminderPageState extends State<ReminderPage> {
           ],
         ),
       ),
-      floatingActionButton: ReminderFloatingAB(),
       body: _reminder.length == 0 ? Center(
-        child : Text("You don't have any reminder ⏰", style: TextStyle(
-          fontSize: 20,color: Colors.white,
-        ),)
-      ): TimelineBuilder(items: _reminder, isSameMonth: isSameMonth, leftPadding: 20, rightPadding: 20, where: "main",),
-    );
+          child : Text("You don't have any reminder ⏰", style: TextStyle(
+            fontSize: 20,color: Colors.white,
+          ),)
+        ): TimelineBuilder(items: _reminder, isSameMonth: isSameMonth, leftPadding: 20, rightPadding: 20, where: "main",),
+      );
   }
 }
