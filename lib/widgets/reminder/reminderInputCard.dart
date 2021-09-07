@@ -1,27 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:ttooler/konstant/konstant.dart';
 import 'package:ttooler/modals/reminderProvier.dart';
 import 'package:provider/provider.dart';
-import 'package:ttooler/widgets/todo/categoryList.dart';
-
-import '../customRectTween.dart';
+import 'package:ttooler/widgets/categoryList.dart';
 
 class AddReminderPopupCard extends StatefulWidget {
   /// {@macro add_todo_popup_card}
-  late final String heroTag;
   final String cardTitle;
   final String title;
-  final String subtitle;
   final String description;
   final DateTime? datetime;
+  final String ? id;
+  final TypeCategory category;
 
   AddReminderPopupCard({
-    required this.heroTag,
     required this.cardTitle,
     required this.title,
-    required this.subtitle,
     required this.description,
     required this.datetime,
+    required this.id,
+    required this.category,
     Key? key,
   }) : super(key: key);
 
@@ -31,38 +31,37 @@ class AddReminderPopupCard extends StatefulWidget {
 
 class _AddReminderPopupCardState extends State<AddReminderPopupCard> {
   String title = "";
-  String subtitle = "";
   String description = "";
-  String? key;
-  late String hero;
+  final _form = GlobalKey<FormState>();
+  TypeCategory category = TypeCategory.food;
 
   DateTime? dateTime;
 
   void saveData() {
     final _reminder = Provider.of<ReminderProvider>(context, listen: false);
 
-    if (key == null) { //if key is null then we have to add
+    if (widget.id == null) {
+      //if key is null then we have to add
       _reminder.addReminder(
         title: title,
         description: description,
-        subtitle: subtitle,
         dateTime: dateTime!,
+        category: category,
       );
-    } else { //else we have to update the todo
-      setState(() {
-        hero = dateTime.toString()+"Edit"; //this updated todo will going to have the same key as dateTime.toString()+"Edit"
-        //so we use to here to update the hero tag of our pop up card
-      });
+    } else {
+      //else we have to update the todo
       _reminder.updateReminder(
         title: title,
-        subtitle: subtitle,
         description: description,
         dateTime: dateTime!,
-        key: key!,
+        key: widget.id!,
+        category: category,
       );
     }
+
     Navigator.of(context).pop();
   }
+
 
   Future<DateTime?> pickDate() async {
     final pickedDate = await showDatePicker(
@@ -118,32 +117,11 @@ class _AddReminderPopupCardState extends State<AddReminderPopupCard> {
       pickedTime.hour,
       pickedTime.minute,
     );
-
+    setState(() {});
   }
 
   void validation() {
-
-    if (title.length <= 3) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Title length must be 3"),
-          duration: Duration(milliseconds: 400),
-        ),
-      );
-      return;
-    } else if (subtitle.length <= 5) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Subtitle length must be 5"),
-        duration: Duration(milliseconds: 400),
-      ));
-      return;
-    } else if (description.length <= 10) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Description length must be 10"),
-        duration: Duration(milliseconds: 400),
-      ));
-      return;
-    } else if (dateTime == null) {
+    if (dateTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Please choose date and time"),
         duration: Duration(milliseconds: 400),
@@ -153,175 +131,243 @@ class _AddReminderPopupCardState extends State<AddReminderPopupCard> {
     saveData();
   }
 
+  void setCategory(TypeCategory c){
+    setState(() {
+      category = c;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     title = widget.title;
-    subtitle = widget.subtitle;
     description = widget.description;
     dateTime = widget.datetime;
-    key = widget.datetime != null ? widget.datetime.toString() : null; //if widget datetime is null means this pop up card is called from add todo
-    hero = widget.heroTag;
+    category = widget.category;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * (0.7)),
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Hero(
-            tag: hero,
-            createRectTween: (begin, end) {
-              return CustomRectTween(begin: begin as Rect, end: end as Rect);
-            },
-            child: Material(
-              color: Theme.of(context).accentColor,
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Form(
-                      // key: _form,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${widget.cardTitle} Reminder",
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Color(0xff262A3D),
-                              // fontWeight: FontWeight.w700
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                                color: Color(0xff262A3D),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              initialValue: title,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                labelText: "Title",
-                              ),
-                              cursorColor: Colors.white,
-                              onChanged: (val) {
-                                title = val;
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                                color: Color(0xff262A3D),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              initialValue: subtitle,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                labelText: "Subtitle",
-                              ),
-                              cursorColor: Colors.white,
-                              onChanged: (val) {
-                                subtitle = val;
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                                color: Color(0xff262A3D),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              initialValue: description,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  labelText: "Description"),
-                              cursorColor: Colors.white,
-                              maxLines: null,
-                              onChanged: (val) {
-                                description = val;
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+    final minW = MediaQuery.of(context).size.width/4 <= 90;
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        margin: EdgeInsets.only(top: 100),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Flexible(
+              child: Container(
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * (0.7)),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).accentColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15))),
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Form(
+                          key: _form,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
-                                    onPressed: () async {
-                                      await pickDateTime();
-                                    },
-                                    child: Text("Pick Date Time")),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${widget.cardTitle} Reminder",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      color: Color(0xff262A3D),
+                                      // fontWeight: FontWeight.w700
+                                    ),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Icon(Icons.notifications,color: Color(0xff262A3D)),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              TextFormField(
+                                style: TextStyle(
+                                    color: Theme.of(context).backgroundColor,
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.w600),
+                                initialValue: title,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    labelText: "Title",
+                                    labelStyle:
+                                    TextStyle(color: Colors.black38),
+                                    hintText: "Enter Title",
+                                    errorStyle: TextStyle(
+                                      color: Colors.black54,
+                                      fontStyle: FontStyle.italic,
+                                    )),
+                                cursorColor: Theme.of(context).canvasColor,
+                                maxLines: null,
+                                onChanged: (value) {
+                                  title = value;
+                                },
+                                validator: (value) {
+                                  if (value == null) {
+                                    return "Enter Title";
+                                  }
+                                  if (value.length <= 3) {
+                                    return "Title length must be 3";
+                                  }
+                                  return null;
+                                },
+                              ),
+                              TextFormField(
+                                style: TextStyle(
+                                    color: Theme.of(context).backgroundColor,
+                                    fontSize: 18),
+                                initialValue: description,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    labelText: "Description",
+                                    labelStyle:
+                                    TextStyle(color: Colors.black38),
+                                    hintText: "Enter description",
+                                    errorStyle: TextStyle(
+                                      color: Colors.black54,
+                                      fontStyle: FontStyle.italic,
+                                    )),
+                                cursorColor: Theme.of(context).canvasColor,
+                                maxLines: null,
+                                onChanged: (value) {
+                                  description = value;
+                                },
+                                validator: (value) {
+                                  if (value == null) {
+                                    return "Enter Description";
+                                  }
+                                  if (value.length <= 8) {
+                                    return "Description length must be 8";
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        await pickDateTime();
+                                      },
+                                      child: dateTime == null
+                                          ? Text("Pick Date Time")
+                                          : Column(
+                                              children: [
+                                                Text(
+                                                  "Pick Date Time",
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                Text(
+                                                  "${DateFormat("MMM dd - h:mm a").format(dateTime!)}",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.white70),
+                                                )
+                                              ],
+                                            ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex:2,
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
+                                            content: CategoryList(onPress: setCategory,),
+                                          ),
+                                        );
+                                      },
+                                      label: Text("Choose Category"),
+                                      icon: Icon(Icons.category),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        if(_form.currentState!.validate()){
+                                          validation();
+                                        }
+                                      },
+                                      child: Container(
+                                        width: minW ? 70: 100,
+                                        child: Center(child: Text("Ok")),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          FittedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                              backgroundColor: Theme.of(context)
-                                                  .primaryColor,
-                                              content: CategoryList(),
-                                            ));
-                                  },
-                                  label: Text("Choose Category"),
-                                  icon: Icon(Icons.category),
-                                ),
-                                SizedBox(
-                                  width: 50,
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    validation();
-                                  },
-                                  child: Text("Ok"),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: IconButton(
+                        onPressed: () {
+                          print("hello");
+                          Navigator.of(context).pop();
+                        },
+                        icon: Material(
+                          borderRadius: BorderRadius.circular(20),
+                          elevation: 5,
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).backgroundColor,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Icon(
+                              Icons.clear,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

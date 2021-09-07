@@ -1,19 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ttooler/konstant/konstant.dart';
 import 'package:ttooler/modals/todoProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:ttooler/widgets/todo/categoryList.dart';
-import '../customRectTween.dart';
+import 'package:ttooler/widgets/categoryList.dart';
 
 class AddTodoPopupCard extends StatefulWidget {
   /// {@macro add_todo_popup_card}
-  late final String heroTag;
   final String cardTitle;
   final String title;
-  final String subtitle;
   final String description;
   final double priority;
-  final String ? todoKey;
-  AddTodoPopupCard({required this.heroTag, required this.cardTitle, required this.title, required this.subtitle, required this.description, required this.priority, required this.todoKey, Key? key}) : super(key: key);
+  final String? todoKey;
+  final bool isCompleted;
+  final TypeCategory category;
+  AddTodoPopupCard(
+      {
+      required this.cardTitle,
+      required this.title,
+      required this.description,
+      required this.priority,
+      required this.todoKey,
+      required this.isCompleted,
+        required this.category,
+      Key? key})
+      : super(key: key);
 
   @override
   _AddTodoPopupCardState createState() => _AddTodoPopupCardState();
@@ -24,222 +35,259 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
   String subtitle = "";
   String description = "";
   String? key;
-  late String hero;
+  TypeCategory category = TypeCategory.food;
 
-  double priority = 1;
+  double priority = 0;
 
+  final _form = GlobalKey<FormState>();
 
   void saveData() {
     final _todos = Provider.of<TodoProvider>(context, listen: false);
-    if(widget.cardTitle == "Add") {
+    if (widget.cardTitle == "Add") {
       _todos.addTodo(
         title: title,
         description: description,
-        subtitle: subtitle,
         priority: priority.toInt(),
+        category: category,
       );
-    }
-    else{
-      setState(() {
-        hero = _todos.updateTodo(title: title, description: description, subtitle: subtitle, key: widget.todoKey!, priority: priority.toInt())+"Edit";
-      });
+    } else {
+      _todos.updateTodo(
+        title: title,
+        key: widget.todoKey!,
+        priority: priority.toInt(),
+        description: description,
+        isCompleted: widget.isCompleted,
+        category: category,
+      );
     }
     Navigator.of(context).pop();
   }
 
-  void validation() {
-
-    if (title.length <= 3) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Title length must be 3"),
-          duration: Duration(milliseconds: 400),
-        ),
-      );
-      return;
-    } else if (subtitle.length <= 5) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Subtitle length must be 5"),
-        duration: Duration(milliseconds: 400),
-      ));
-      return;
-    } else if (description.length <= 10) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Description length must be 10"),
-        duration: Duration(milliseconds: 400),
-      ));
-      return;
-    }
-
-    saveData();
+  void setCategory(TypeCategory c){
+    setState(() {
+      category = c;
+    });
   }
 
   void initState() {
     // TODO: implement initState
     super.initState();
     title = widget.title;
-    subtitle = widget.subtitle;
     description = widget.description;
-    hero = widget.heroTag;
     priority = widget.priority;
+    category = widget.category;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height*(0.7)
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Hero(
-            tag: hero,
-            createRectTween: (begin, end) {
-              return CustomRectTween(begin: begin as Rect, end: end as Rect);
-            },
-            child: Material(
-              color: Theme.of(context).accentColor,
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Form(
-                      // key: _form,
+    final minW = MediaQuery.of(context).size.width/4 <= 90;
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        margin: EdgeInsets.only(top: 100),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Flexible(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height*(0.7)
+                ),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).accentColor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "${widget.cardTitle} Todo",
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Color(0xff262A3D),
-                              // fontWeight: FontWeight.w700
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                                color: Color(0xff262A3D),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              initialValue: title,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                labelText: "Title",
-                              ),
-                              cursorColor: Colors.white,
-                              onChanged: (value){
-                                title = value;
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                                color: Color(0xff262A3D),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              initialValue: subtitle,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                labelText: "Subtitle",
-                              ),
-                              cursorColor: Colors.white,
-                              onChanged: (value){
-                                subtitle = value;
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                                color: Color(0xff262A3D),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: TextFormField(
-                              style: TextStyle(color: Colors.white),
-                              initialValue: description,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  labelText: "Description"),
-                              cursorColor: Colors.white,
-                              maxLines: null,
-                              onChanged: (value){
-                                description = value;
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text("Set priority", style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                          ),),
-                          Slider(
-                            inactiveColor: Color(0xff181920),
-                            activeColor: Color(0xff181920),
-                            onChanged: (value){
-                                setState(() {
-                                  priority = value;
-                                });
-                            },
-                            value: priority,
-                            divisions: 10,
-                            min: 0,
-                            max: 10,
-                            label: "${priority.toInt()}",
-
-                          ),
-                          FittedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ElevatedButton.icon(onPressed: (){
-                                  showDialog(context: context, builder: (context) => AlertDialog(
-                                    backgroundColor: Theme.of(context).primaryColor,
-                                    content: CategoryList(),
-                                  ));
-                                }, label: Text("Choose Category"), icon: Icon(Icons.category),),
-                                SizedBox(
-                                  width: 30,
-                                ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      validation();
+                          Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Form(
+                              key: _form,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "${widget.cardTitle} Todo",
+                                        style: TextStyle(
+                                          fontSize: 25,
+                                          color: Color(0xff262A3D),
+                                          // fontWeight: FontWeight.w700
+                                        ),
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Icon(Icons.check_box,color: Color(0xff262A3D)),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  TextFormField(
+                                    style: TextStyle(
+                                        color: Theme.of(context).backgroundColor,
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.w600),
+                                    initialValue: title,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        labelText: "Title",
+                                        labelStyle: TextStyle(color: Colors.black38),
+                                        hintText: "Enter todo",
+                                        errorStyle: TextStyle(
+                                          color: Colors.black54,
+                                          fontStyle: FontStyle.italic,
+                                        )),
+                                    cursorColor: Theme.of(context).canvasColor,
+                                    maxLines: null,
+                                    onChanged: (value) {
+                                      title = value;
                                     },
-                                    child: Text("Ok"),),
-                              ],
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return "Enter Title";
+                                      }
+                                      if (value.length <= 3) {
+                                        return "Title length must be 3";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  // Divider(height: 3, thickness: 1, color: Colors.black38,),
+                                  TextFormField(
+                                    style: TextStyle(
+                                        color: Theme.of(context).backgroundColor,
+                                        fontSize: 18),
+                                    initialValue: description,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        labelText: "Description",
+                                        labelStyle: TextStyle(color: Colors.black38),
+                                        hintText: "Enter description",
+                                        errorStyle: TextStyle(
+                                          color: Colors.black54,
+                                          fontStyle: FontStyle.italic,
+                                        )),
+                                    cursorColor: Theme.of(context).canvasColor,
+                                    maxLines: null,
+                                    onChanged: (value) {
+                                      description = value;
+                                    },
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return "Enter Description";
+                                      }
+                                      if (value.length <= 8) {
+                                        return "Description length must be 8";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  // Divider(height: 3, thickness: 1, color: Colors.black38,),
+                                  SizedBox(
+                                    height: 25,
+                                  ),
+                                  Text(
+                                    "Set priority",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xff262A3D),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Slider(
+                                    inactiveColor: Color(0xff181920),
+                                    activeColor: Color(0xff181920),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        priority = value;
+                                      });
+                                    },
+                                    value: priority,
+                                    divisions: 10,
+                                    min: 0,
+                                    max: 10,
+                                    label: "${priority.toInt()}",
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                    backgroundColor: Theme.of(context)
+                                                        .primaryColor,
+                                                    content: CategoryList(onPress: setCategory,),
+                                                  ));
+                                        },
+                                        label: Text("Choose Category"),
+                                        icon: Icon(Icons.category),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          if (_form.currentState!.validate()) {
+                                            saveData();
+                                          }
+                                        },
+                                        child: Container(
+                                            width: minW ? 60 : 100,
+                                            child: Center(child: Text("Ok"))
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: IconButton(
+                        onPressed: () {
+                          print("hello");
+                          Navigator.of(context).pop();
+                        },
+                        icon: Material(
+                          borderRadius: BorderRadius.circular(20),
+                          elevation: 5,
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).backgroundColor,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Icon(
+                              Icons.clear,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 }
-
-

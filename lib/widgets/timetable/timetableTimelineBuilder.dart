@@ -27,6 +27,13 @@ class TimetableTimelineBuilder extends StatelessWidget {
     return false;
   }
 
+  bool isCurrentSchedule(TimeOfDay time){
+    if(time.hour == DateTime.now().hour && time.minute == DateTime.now().minute){
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return items.length == 0 ? Center(
@@ -41,7 +48,7 @@ class TimetableTimelineBuilder extends StatelessWidget {
             ),
           ),
           Text(
-            "You don't have any time table.😪",
+            "You don't have any schedule.😪",
             style: TextStyle(
               fontSize: 18,
               color: Colors.white,
@@ -62,15 +69,19 @@ class TimetableTimelineBuilder extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                if(index == 0) Text(
+                if(index == 0 && where == "main") Text(
                   "$day",
                   style: TextStyle(fontSize: 20, color: Colors.white70),
                 ),
-                if(index == 0)Text(
+                if(index == 0 && isCurrentSchedule(items[index].fromTimeOfDay))Text(
                   "Current",
                   style: TextStyle(fontSize: 17, color: Colors.white60,fontWeight: FontWeight.w100,),
                 ),
-                if(index == 1)Text(
+                if(index == 0 && !isCurrentSchedule(items[index].fromTimeOfDay))Text(
+                  "Upcoming",
+                  style: TextStyle(fontSize: 17, color: Colors.white60,fontWeight: FontWeight.w100,),
+                ),
+                if(index == 1 && isCurrentSchedule(items[index-1].fromTimeOfDay))Text(
                   "Upcoming",
                   style: TextStyle(fontSize: 17, color: Colors.white60,fontWeight: FontWeight.w100,),
                 ),
@@ -102,11 +113,12 @@ class TimetableTimelineBuilder extends StatelessWidget {
                   child: TimetableCard(
                     day: items[index].day,
                     description: items[index].description,
-                    heroKey: items[index].key,
                     index: index,
                     fromTime: items[index].fromTimeOfDay,
                     toTime: items[index].toTimeOfDay,
                     title: items[index].title,
+                    id: items[index].id,
+                    category: items[index].category,
                   )
                 ),
                 new Positioned(

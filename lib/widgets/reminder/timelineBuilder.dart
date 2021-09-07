@@ -65,6 +65,7 @@ class TimelineBuilder extends StatelessWidget {
                       description: items[index].description,
                       dateTime: items[index].dateTime,
                       index: index,
+                      category: items[index].category,
                       id: items[index].id,
                     ),),
                 new Positioned(
