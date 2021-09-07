@@ -6,7 +6,7 @@ import 'package:ttooler/pageRoutebuilder/customPageRouteBuilder.dart';
 import 'package:ttooler/pages/homePage.dart';
 import 'package:ttooler/pages/reminderPage.dart';
 import 'package:ttooler/widgets/home/glanceHeader.dart';
-import 'package:ttooler/widgets/timelineBuilder.dart';
+import 'package:ttooler/widgets/reminder/timelineBuilder.dart';
 
 class ReminderGlance extends StatelessWidget {
   bool isSameMonth(DateTime prev, DateTime next) {
