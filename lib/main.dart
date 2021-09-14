@@ -3,26 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ttooler/modals/reminderProvier.dart';
 import 'package:ttooler/modals/timetableProvider.dart';
 import 'package:ttooler/modals/todoProvider.dart';
+import 'package:ttooler/modals/userInfo.dart';
+import 'package:ttooler/pages/landing.dart';
 import 'package:ttooler/pages/splashPage.dart';
 
 import 'notification/notifications.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+Future<bool> isNewUser() async{
+  SharedPreferences sp = await SharedPreferences.getInstance();
+  bool newUser = sp.getBool("newUser") ?? true;
+  print("This is new user "+newUser.toString());
+  if(newUser == true){
+    await sp.setBool("newUser", false);
+  }
+  return newUser;
+}
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //this will prevent to change orientation of app.
-  await Notifications.init();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+  bool notificationOpensApp = await Notifications.init();
+  bool newUser = await isNewUser();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
-    runApp(new MyApp());
+    runApp(new MyApp(newUser: newUser, notificationOpensApp: notificationOpensApp,));
   });
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool newUser;
+  final bool notificationOpensApp;
+  const MyApp({required this.newUser, required this.notificationOpensApp, Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +50,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => TodoProvider(),),
         ChangeNotifierProvider(create: (context) => ReminderProvider()),
         ChangeNotifierProvider(create: (context) => TimeTableProvider()),
+        ChangeNotifierProvider(create: (context) => UserInfo()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-          home: LandingPage(),
+          home: newUser ? LandingPage() : SplashPage(),
         theme: ThemeData(
           primaryColor:Color(0xff181920),
           accentColor: Color(0xffb1acfa),

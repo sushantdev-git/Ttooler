@@ -47,7 +47,7 @@ class ReminderProvider extends ChangeNotifier{
 
       await Notifications.showScheduledNotification(
           id: Notifications.getHashCode(dateTime.toString()+"reminder"),
-          title: title,
+          title: "Reminder | "+title,
           body: description.length <= 25 ? description : description.substring(0,15)+"...",
           scheduleDate: dateTime);
 
@@ -75,8 +75,8 @@ class ReminderProvider extends ChangeNotifier{
 
     await Notifications.showScheduledNotification(
         id: Notifications.getHashCode(dateTime.toString()+"reminder"),
-        title: title,
-        body: description.length <= 25 ? description : description.substring(0,15)+"...",
+        title: "Reminder | "+title,
+        body: description.length <= 25 ? description : description.substring(0,25)+"...",
         scheduleDate: dateTime);
 
     notifyListeners();

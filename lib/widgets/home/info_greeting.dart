@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:ttooler/modals/userInfo.dart';
 
 class InfoGreeting extends StatelessWidget {
   InfoGreeting({Key? key}) : super(key: key);
@@ -26,6 +28,7 @@ class InfoGreeting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userInfo = Provider.of<UserInfo>(context, listen: false);
     return Container(
       margin: EdgeInsets.only(bottom: 10, top: 5),
       child: Row(
@@ -42,7 +45,7 @@ class InfoGreeting extends StatelessWidget {
                 ),
               ),
               Text(
-                "Sushant",
+                "${userInfo.name}",
                 style: TextStyle(
                   fontSize: 27,
                 ),
@@ -57,7 +60,13 @@ class InfoGreeting extends StatelessWidget {
             ],
           ),
           Container(
-            child: Image.asset("assets/images/illustration/memoji.png", height: 100,),
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Image.memory(userInfo.byteImage, fit: BoxFit.cover, width: 100, height: 100,),
           )
         ],
       ),

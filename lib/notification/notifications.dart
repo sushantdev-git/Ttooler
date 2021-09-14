@@ -9,9 +9,9 @@ import 'package:timezone/timezone.dart' as tz;
 class Notifications {
   static final _notifications = FlutterLocalNotificationsPlugin();
 
-  static MethodChannel platform = MethodChannel('dexterx.dev/flutter_local_notifications_example');
+  //static MethodChannel platform = MethodChannel('dexterx.dev/flutter_local_notifications_example');
 
-  static Future<void> init() async {
+  static Future<bool> init() async {
     tz.initializeTimeZones();
     final String? locationName = await FlutterNativeTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(locationName!));
@@ -24,6 +24,9 @@ class Notifications {
             android: initializationSettingsAndroid, iOS: null, macOS: null);
 
     await _notifications.initialize(initializationSettings);
+    final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+    await _notifications.getNotificationAppLaunchDetails();
+    return notificationAppLaunchDetails!.didNotificationLaunchApp;
   }
 
 
@@ -44,7 +47,6 @@ class Notifications {
     required int id,
     String? title,
     String? body,
-    String? payload,
     required DateTime scheduleDate,
   }) async =>
       _notifications.zonedSchedule(
@@ -62,7 +64,6 @@ class Notifications {
     required int id,
     String? title,
     String? body,
-    String? payload,
     required int weekday,
     required Time scheduleTime,
   }) async => _notifications.zonedSchedule(
@@ -86,18 +87,58 @@ class Notifications {
   }
 
 
-  static tz.TZDateTime _scheduleWeekly(Time time, weekDay){
-    tz.TZDateTime scheduleDate = _scheduleDaily(time);
-    print("hour");
-    print(time.hour);
-    print(time.minute);
-    print("weekday");
-    print(weekDay);
-    while(scheduleDate.weekday != weekDay){
-      scheduleDate = scheduleDate.add(const Duration(days: 1));
-    }
+  static tz.TZDateTime _scheduleWeekly (Time time, int weekDay){
 
-    return scheduleDate;
+    switch(weekDay){
+      case 1:
+        tz.TZDateTime scheduleDate = _scheduleDaily(time);
+        while(scheduleDate.weekday != DateTime.monday){
+          scheduleDate = scheduleDate.add(const Duration(days: 1));
+        }
+        return scheduleDate;
+
+      case 2:
+        tz.TZDateTime scheduleDate = _scheduleDaily(time);
+        while(scheduleDate.weekday != DateTime.tuesday){
+          scheduleDate = scheduleDate.add(const Duration(days: 1));
+        }
+        return scheduleDate;
+
+      case 3:
+        tz.TZDateTime scheduleDate = _scheduleDaily(time);
+        while(scheduleDate.weekday != DateTime.wednesday){
+          scheduleDate = scheduleDate.add(const Duration(days: 1));
+        }
+        return scheduleDate;
+
+      case 4:
+        tz.TZDateTime scheduleDate = _scheduleDaily(time);
+        while(scheduleDate.weekday != DateTime.thursday){
+          scheduleDate = scheduleDate.add(const Duration(days: 1));
+        }
+        return scheduleDate;
+
+      case 5:
+        tz.TZDateTime scheduleDate = _scheduleDaily(time);
+        while(scheduleDate.weekday != DateTime.friday){
+          scheduleDate = scheduleDate.add(const Duration(days: 1));
+        }
+        return scheduleDate;
+
+      case 6:
+        tz.TZDateTime scheduleDate = _scheduleDaily(time);
+        while(scheduleDate.weekday != DateTime.saturday){
+          scheduleDate = scheduleDate.add(const Duration(days: 1));
+        }
+        return scheduleDate;
+
+      default:
+        tz.TZDateTime scheduleDate = _scheduleDaily(time);
+        while(scheduleDate.weekday != DateTime.sunday){
+          scheduleDate = scheduleDate.add(const Duration(days: 1));
+        }
+        return scheduleDate;
+    }
   }
 
 
@@ -108,12 +149,12 @@ class Notifications {
   }
 
 
-
   static int getHashCode(String s){
     int sum = 0;
-    for(int i=0; i< min(s.length,20); i++){
+    for(int i=0; i< min(s.length,100); i++){
       sum+=(s.codeUnitAt(i)*31)%100000007;
     }
+    print(sum);
     return sum;
   }
 }

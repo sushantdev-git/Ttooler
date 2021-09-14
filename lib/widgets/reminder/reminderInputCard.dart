@@ -224,6 +224,9 @@ class _AddReminderPopupCardState extends State<AddReminderPopupCard> {
                                   if (value.length <= 3) {
                                     return "Title length must be 3";
                                   }
+                                  if (value.length >= 20) {
+                                    return "Title length must be under 20";
+                                  }
                                   return null;
                                 },
                               ),

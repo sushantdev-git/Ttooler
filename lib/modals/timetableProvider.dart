@@ -50,6 +50,100 @@ class TimeTableProvider extends ChangeNotifier {
   var queueSun = PriorityQueue<TimeTable>(
       (a, b) => compareTime(a.fromTimeOfDay, b.fromTimeOfDay));
 
+
+  List<TimeTable> getTimetableList(String day){
+    switch (day) {
+      case "Monday":
+        return _itemsMonday;
+      case "Tuesday":
+        return _itemsTuesday;
+      case "Wednesday":
+        return _itemsWednesday;
+      case "Thursday":
+        return _itemsThursday;
+      case "Friday":
+        return _itemsFriday;
+      case "Saturday":
+        return _itemsSaturday;
+      default:
+        return _itemsSunday;
+    }
+  }
+
+
+  PriorityQueue<TimeTable> getTimetableQueue(String day){
+    switch (day) {
+      case "Monday":
+        return queueMon;
+      case "Tuesday":
+        return queueTue;
+      case "Wednesday":
+        return queueWed;
+      case "Thursday":
+        return queueThr;
+      case "Friday":
+        return queueFri;
+      case "Saturday":
+        return queueSat;
+      default:
+        return queueSun;
+    }
+  }
+
+  void setTimetableList(String day, List<TimeTable> dayList){
+    switch (day) {
+      case "Monday":
+        _itemsMonday = dayList;
+        break;
+      case "Tuesday":
+        _itemsTuesday = dayList;
+        break;
+      case "Wednesday":
+        _itemsWednesday = dayList;
+        break;
+      case "Thursday":
+        _itemsThursday = dayList;
+        break;
+      case "Friday":
+        _itemsFriday = dayList;
+        break;
+      case "Saturday":
+        _itemsSaturday = dayList;
+        break;
+      default:
+        _itemsSunday = dayList;
+        break;
+    }
+    notifyListeners();
+  }
+
+
+   void setTimetableQueue(String day, PriorityQueue<TimeTable> dayQ){
+    switch (day) {
+      case "Monday":
+        queueMon = dayQ;
+        break;
+      case "Tuesday":
+        queueTue = dayQ;
+        break;
+      case "Wednesday":
+        queueWed = dayQ;
+        break;
+      case "Thursday":
+        queueThr = dayQ;
+        break;
+      case "Friday":
+        queueFri = dayQ;
+        break;
+      case "Saturday":
+        queueSat = dayQ;
+        break;
+      default:
+        queueSun = dayQ;
+        break;
+    }
+  }
+
   int combineHourAndMin(TimeOfDay A) {
     final now = DateTime.now();
     final toFormat = DateTime(now.year, now.month, now.day, A.hour, A.minute);
@@ -109,33 +203,22 @@ class TimeTableProvider extends ChangeNotifier {
   int getDayNumber(String day) {
     switch (day) {
       case "Monday":
-        return 0;
-      case "Tuesday":
         return 1;
-      case "Wednesday":
+      case "Tuesday":
         return 2;
-      case "Thursday":
+      case "Wednesday":
         return 3;
-      case "Friday":
+      case "Thursday":
         return 4;
-      case "Saturday":
+      case "Friday":
         return 5;
-      default:
+      case "Saturday":
         return 6;
+      default:
+        return 7;
     }
   }
 
-  int dayDifference(String day) {
-    //this function find the difference between two days
-    final now = DateTime.now();
-    String nowDay = DateFormat("EEEE").format(now);
-
-    int a = getDayNumber(day);
-    int b = getDayNumber(nowDay);
-
-    // print(a - b);
-    return a - b;
-  }
 
   void add(
       {required String title,
@@ -145,298 +228,75 @@ class TimeTableProvider extends ChangeNotifier {
       required String whichDay,
       required TypeCategory category,
       required List<int> overlappingIndexes}) async {
+
     final now = DateTime.now();
     final toTime = DateTime(
         now.year, now.month, now.day, toTimeOfDay.hour, toTimeOfDay.minute);
     final fromTime = DateTime(
         now.year, now.month, now.day, fromTimeOfDay.hour, fromTimeOfDay.minute);
-    if (whichDay == "Monday") {
-      for (int i = 0; i < overlappingIndexes.length; i++) {
-        queueMon.remove(_itemsMonday[overlappingIndexes[i]]);
-        await TimetableDatabase.delete(
-            _itemsMonday[overlappingIndexes[i]].id, "Monday");
-        await Notifications.cancelNotification(
-            Notifications.getHashCode(_itemsMonday[overlappingIndexes[i]].id));
-        //this will cancel any scheduled notifications.
 
-      }
-      queueMon.add(TimeTable(
-        title: title,
-        description: description,
-        fromTimeOfDay: fromTimeOfDay,
-        toTimeOfDay: toTimeOfDay,
-        id: now.toString() + whichDay,
-        day: whichDay,
-        category: category,
-      ));
-      _itemsMonday = queueMon.toList();
-      await TimetableDatabase.insert({
-        "id": now.toString() + whichDay,
-        "title": title,
-        "description": description,
-        "toTime": toTime.toIso8601String(),
-        "fromTime": fromTime.toIso8601String(),
-        "day": "Monday",
-        "category":category.index,
-      }, "Monday");
 
-      await Notifications.showWeeklyNotification(
-        id: Notifications.getHashCode(now.toString() + whichDay),
-        scheduleTime: Time(fromTime.hour, fromTime.minute),
-        title: title,
-        body: description,
-        weekday: 1,
-      );
-      notifyListeners();
-    } else if (whichDay == "Tuesday") {
-      for (int i = 0; i < overlappingIndexes.length; i++) {
-        queueTue.remove(_itemsTuesday[overlappingIndexes[i]]);
-        await TimetableDatabase.delete(
-            _itemsTuesday[overlappingIndexes[i]].id, "Tuesday");
-        await Notifications.cancelNotification(
-            Notifications.getHashCode(_itemsTuesday[overlappingIndexes[i]].id));
-        // print(Notifications.getHashCode(_itemsTuesday[overlappingIndexes[i]].id));
-      }
-      queueTue.add(TimeTable(
-          title: title,
-          description: description,
-          fromTimeOfDay: fromTimeOfDay,
-          toTimeOfDay: toTimeOfDay,
-          id: now.toString() + whichDay,
-          category: category,
-          day: whichDay));
-      _itemsTuesday = queueTue.toList();
-      await TimetableDatabase.insert({
-        "id": now.toString() + whichDay,
-        "title": title,
-        "description": description,
-        "toTime": toTime.toIso8601String(),
-        "fromTime": fromTime.toIso8601String(),
-        "day": "Tuesday",
-        "category":category.index,
-      }, "Tuesday");
-      await Notifications.showWeeklyNotification(
-        id: Notifications.getHashCode(now.toString() + whichDay),
-        scheduleTime: Time(fromTime.hour, fromTime.minute),
-        title: title,
-        body: description,
-        weekday: 2,
-      );
-      // print(Notifications.getHashCode(now.toString() + whichDay));
-      notifyListeners();
-    } else if (whichDay == "Wednesday") {
-      for (int i = 0; i < overlappingIndexes.length; i++) {
-        queueWed.remove(_itemsWednesday[overlappingIndexes[i]]);
-        await TimetableDatabase.delete(
-            _itemsWednesday[overlappingIndexes[i]].id, "Wednesday");
-        await Notifications.cancelNotification(Notifications.getHashCode(
-            _itemsWednesday[overlappingIndexes[i]].id));
-      }
-      queueWed.add(TimeTable(
-        title: title,
-        description: description,
-        fromTimeOfDay: fromTimeOfDay,
-        toTimeOfDay: toTimeOfDay,
-        id: now.toString() + whichDay,
-        day: whichDay,
-        category: category,
-      ));
-      _itemsWednesday = queueWed.toList();
-      await TimetableDatabase.insert({
-        "id": now.toString() + whichDay,
-        "title": title,
-        "description": description,
-        "toTime": toTime.toIso8601String(),
-        "fromTime": fromTime.toIso8601String(),
-        "day": "Wednesday",
-        "category":category.index,
-      }, "Wednesday");
-      await Notifications.showWeeklyNotification(
-        id: Notifications.getHashCode(now.toString() + whichDay),
-        scheduleTime: Time(fromTime.hour, fromTime.minute),
-        title: title,
-        body: description,
-        weekday: 3,
-      );
-      notifyListeners();
-    } else if (whichDay == "Thursday") {
-      for (int i = 0; i < overlappingIndexes.length; i++) {
-        queueThr.remove(_itemsThursday[overlappingIndexes[i]]);
-        await TimetableDatabase.delete(
-            _itemsThursday[overlappingIndexes[i]].id, "Thursday");
-        await Notifications.cancelNotification(Notifications.getHashCode(
-            _itemsThursday[overlappingIndexes[i]].id));
-      }
-      queueThr.add(TimeTable(
-        title: title,
-        description: description,
-        fromTimeOfDay: fromTimeOfDay,
-        toTimeOfDay: toTimeOfDay,
-        id: now.toString() + whichDay,
-        day: whichDay,
-        category: category,
-      ));
-      _itemsThursday = queueThr.toList();
-      await TimetableDatabase.insert({
-        "id": now.toString() + whichDay,
-        "title": title,
-        "description": description,
-        "toTime": toTime.toIso8601String(),
-        "fromTime": fromTime.toIso8601String(),
-        "day": "Thursday",
-        "category":category.index,
-      }, "Thursday");
-      await Notifications.showWeeklyNotification(
-        id: Notifications.getHashCode(now.toString() + whichDay),
-        scheduleTime: Time(fromTime.hour, fromTime.minute),
-        title: title,
-        body: description,
-        weekday: 4,
-      );
-      notifyListeners();
-    } else if (whichDay == "Friday") {
-      for (int i = 0; i < overlappingIndexes.length; i++) {
-        queueFri.remove(_itemsFriday[overlappingIndexes[i]]);
-        await TimetableDatabase.delete(
-            _itemsFriday[overlappingIndexes[i]].id, "Friday");
-        await Notifications.cancelNotification(
-            Notifications.getHashCode(_itemsFriday[overlappingIndexes[i]].id));
-      }
-      queueFri.add(TimeTable(
-        title: title,
-        description: description,
-        fromTimeOfDay: fromTimeOfDay,
-        toTimeOfDay: toTimeOfDay,
-        id: now.toString() + whichDay,
-        day: whichDay,
-        category: category,
-      ));
-      _itemsFriday = queueFri.toList();
-      await TimetableDatabase.insert({
-        "id": now.toString() + whichDay,
-        "title": title,
-        "description": description,
-        "toTime": toTime.toIso8601String(),
-        "fromTime": fromTime.toIso8601String(),
-        "day": "Friday",
-        "category":category.index,
-      }, "Friday");
-      await Notifications.showWeeklyNotification(
-        id: Notifications.getHashCode(now.toString() + whichDay),
-        scheduleTime: Time(fromTime.hour, fromTime.minute),
-        title: title,
-        body: description,
-        weekday: 5,
-      );
-      notifyListeners();
-    } else if (whichDay == "Saturday") {
-      for (int i = 0; i < overlappingIndexes.length; i++) {
-        queueSat.remove(_itemsSaturday[overlappingIndexes[i]]);
-        await TimetableDatabase.delete(
-            _itemsSaturday[overlappingIndexes[i]].id, "Saturday");
-        await Notifications.cancelNotification(Notifications.getHashCode(
-            _itemsSaturday[overlappingIndexes[i]].id));
-      }
-      queueSat.add(TimeTable(
-        title: title,
-        description: description,
-        fromTimeOfDay: fromTimeOfDay,
-        toTimeOfDay: toTimeOfDay,
-        id: now.toString() + whichDay,
-        day: whichDay,
-        category: category,
-      ));
-      _itemsSaturday = queueSat.toList();
-      await TimetableDatabase.insert({
-        "id": now.toString() + whichDay,
-        "title": title,
-        "description": description,
-        "toTime": toTime.toIso8601String(),
-        "fromTime": fromTime.toIso8601String(),
-        "day": "Saturday",
-        "category":category.index,
-      }, "Saturday");
-      await Notifications.showWeeklyNotification(
-        id: Notifications.getHashCode(now.toString() + whichDay),
-        scheduleTime: Time(fromTime.hour, fromTime.minute),
-        title: title,
-        body: description,
-        weekday: 6,
-      );
-      // print(now.weekday);
-      notifyListeners();
-    } else if (whichDay == "Sunday") {
-      for (int i = 0; i < overlappingIndexes.length; i++) {
-        queueSun.remove(_itemsSunday[overlappingIndexes[i]]);
-        await TimetableDatabase.delete(
-            _itemsSunday[overlappingIndexes[i]].id, "Sunday");
-        await Notifications.cancelNotification(
-            Notifications.getHashCode(_itemsSunday[overlappingIndexes[i]].id));
-      }
-      queueSun.add(TimeTable(
-        title: title,
-        description: description,
-        fromTimeOfDay: fromTimeOfDay,
-        toTimeOfDay: toTimeOfDay,
-        id: now.toString() + whichDay,
-        day: whichDay,
-        category: category,
-      ));
-      _itemsSunday = queueSun.toList();
-      await TimetableDatabase.insert({
-        "id": now.toString() + whichDay,
-        "title": title,
-        "description": description,
-        "toTime": toTime.toIso8601String(),
-        "fromTime": fromTime.toIso8601String(),
-        "day": "Sunday",
-        "category":category.index,
-      }, "Sunday");
-      await Notifications.showWeeklyNotification(
-        id: Notifications.getHashCode(now.toString() + whichDay),
-        scheduleTime: Time(fromTime.hour, fromTime.minute),
-        title: title,
-        body: description,
-        weekday: 7,
-      );
-      notifyListeners();
+    List<TimeTable> dayList = getTimetableList(whichDay);
+    PriorityQueue<TimeTable> dayQ = getTimetableQueue(whichDay);
+
+
+    for (int i = 0; i < overlappingIndexes.length; i++) {
+      dayQ.remove(dayList[overlappingIndexes[i]]);
+      await TimetableDatabase.delete(
+          dayList[overlappingIndexes[i]].id, whichDay);
+      await Notifications.cancelNotification(
+          Notifications.getHashCode(dayList[overlappingIndexes[i]].id));
+      //this will cancel any scheduled notifications.
+
     }
+    dayQ.add(TimeTable(
+      title: title,
+      description: description,
+      fromTimeOfDay: fromTimeOfDay,
+      toTimeOfDay: toTimeOfDay,
+      id: now.toString() + whichDay,
+      day: whichDay,
+      category: category,
+    ));
+    dayList = dayQ.toList();
+    await TimetableDatabase.insert({
+      "id": now.toString() + whichDay,
+      "title": title,
+      "description": description,
+      "toTime": toTime.toIso8601String(),
+      "fromTime": fromTime.toIso8601String(),
+      "day": whichDay,
+      "category":category.index,
+    }, whichDay);
+
+    await Notifications.showWeeklyNotification(
+      id: Notifications.getHashCode(now.toString() + "Timetable" + whichDay ),
+      scheduleTime: Time(fromTime.hour, fromTime.minute),
+      title: description.length != 0 ? "Timetable | "+ title : "TimeTable",
+      body: description.length != 0 ? description : title,
+      weekday: getDayNumber(whichDay),
+    );
+    setTimetableList(whichDay, dayList);
+    setTimetableQueue(whichDay, dayQ);
+
   }
 
   List<TimeTable> getListOfTimeTable(String day, String where) {
-    switch (day) {
-      case "Monday":
-        if (where == "modal") return [..._itemsMonday];
-        return orderTimetable([..._itemsMonday]);
-      case "Tuesday":
-        if (where == "modal") return [..._itemsTuesday];
-        return orderTimetable([..._itemsTuesday]);
-      case "Wednesday":
-        if (where == "modal") return [..._itemsWednesday];
-        return orderTimetable([..._itemsWednesday]);
-      case "Thursday":
-        if (where == "modal") return [..._itemsThursday];
-        return orderTimetable([..._itemsThursday]);
-      case "Friday":
-        if (where == "modal") return [..._itemsFriday];
-        return orderTimetable([..._itemsFriday]);
-      case "Saturday":
-        if (where == "modal") return [..._itemsSaturday];
-        return orderTimetable([..._itemsSaturday]);
-      default:
-        if (where == "modal") return [..._itemsSunday];
-        return orderTimetable([..._itemsSunday]);
-    }
+    //This function is called by widgets to get the timetable list of that day.
+    List<TimeTable> dayList = getTimetableList(day);
+    if (where == "modal") return dayList;
+    return orderTimetable(dayList);
+
   }
 
-  // void printQueue(List<TimeTable> temp) {
-  //   for (int i = 0; i < temp.length; i++) {
-  //     print(temp[i].title);
-  //     print(temp[i].description);
-  //     print(temp[i].fromTimeOfDay.toString());
-  //     print(temp[i].id);
-  //   }
-  // }
+  void printList(List<TimeTable> temp) {
+    for (int i = 0; i < temp.length; i++) {
+      print(temp[i].title);
+      print(temp[i].description);
+      print(temp[i].fromTimeOfDay.toString());
+      print(temp[i].id);
+    }
+  }
 
   List<TimeTable> orderTimetable(List<TimeTable> time) {
     var q = QueueList<TimeTable>();
@@ -466,351 +326,100 @@ class TimeTableProvider extends ChangeNotifier {
     if (key == null) {
       return -1;
     }
-    switch (day) {
-      case "Monday":
-        return _itemsMonday.indexWhere((element) => element.id == key);
-      case "Tuesday":
-        return _itemsTuesday.indexWhere((element) => element.id == key);
-      case "Wednesday":
-        return _itemsWednesday.indexWhere((element) => element.id == key);
-      case "Thursday":
-        return _itemsThursday.indexWhere((element) => element.id == key);
-      case "Friday":
-        return _itemsFriday.indexWhere((element) => element.id == key);
-      case "Saturday":
-        return _itemsSaturday.indexWhere((element) => element.id == key);
-      default:
-        return _itemsSunday.indexWhere((element) => element.id == key);
-    }
+    List<TimeTable> dayList = getTimetableList(day);
+    return dayList.indexWhere((element) => element.id == key);
+
   }
 
   void removeSchedule(String key, String day) async {
-    switch (day) {
-      case "Monday":
-        final item = _itemsMonday.firstWhere((element) => element.id == key);
-        queueMon.remove(item);
-        await TimetableDatabase.delete(key, day);
-        await Notifications.cancelNotification(Notifications.getHashCode(key));
-        _itemsMonday = queueMon.toList();
-        break;
-      case "Tuesday":
-        final item = _itemsTuesday.firstWhere((element) => element.id == key);
-        queueTue.remove(item);
-        await TimetableDatabase.delete(key, day);
-        await Notifications.cancelNotification(Notifications.getHashCode(key));
-        _itemsTuesday = queueTue.toList();
-        break;
-      case "Wednesday":
-        final item = _itemsWednesday.firstWhere((element) => element.id == key);
-        queueWed.remove(item);
-        await TimetableDatabase.delete(key, day);
-        await Notifications.cancelNotification(Notifications.getHashCode(key));
-        _itemsWednesday = queueWed.toList();
-        break;
-      case "Thursday":
-        final item = _itemsThursday.firstWhere((element) => element.id == key);
-        queueThr.remove(item);
-        await TimetableDatabase.delete(key, day);
-        await Notifications.cancelNotification(Notifications.getHashCode(key));
-        _itemsThursday = queueThr.toList();
-        break;
-      case "Friday":
-        final item = _itemsFriday.firstWhere((element) => element.id == key);
-        queueFri.remove(item);
-        await TimetableDatabase.delete(key, day);
-        await Notifications.cancelNotification(Notifications.getHashCode(key));
-        _itemsFriday = queueFri.toList();
-        break;
-      case "Saturday":
-        final item = _itemsSaturday.firstWhere((element) => element.id == key);
-        queueSat.remove(item);
-        await TimetableDatabase.delete(key, day);
-        await Notifications.cancelNotification(Notifications.getHashCode(key));
-        _itemsSaturday = queueSat.toList();
-        break;
-      default:
-        final item = _itemsSunday.firstWhere((element) => element.id == key);
-        queueSun.remove(item);
-        await TimetableDatabase.delete(key, day);
-        await Notifications.cancelNotification(Notifications.getHashCode(key));
-        _itemsSunday = queueSun.toList();
-        break;
-    }
-    notifyListeners();
+    print(day);
+
+    List<TimeTable> dayList = getTimetableList(day);
+    PriorityQueue<TimeTable> dayQ = getTimetableQueue(day);
+
+    final item = dayList.firstWhere((element) => element.id == key);
+    dayQ.remove(item);
+    await TimetableDatabase.delete(key, day);
+    await Notifications.cancelNotification(Notifications.getHashCode(key));
+    dayList = dayQ.toList();
+
+    setTimetableList(day, dayList);
+    setTimetableQueue(day, dayQ);
+
   }
 
 
   int getCategoryWiseTime(TypeCategory category, String day){
     int totalTime = 0;
-    switch (day) {
-      case "Monday":
-        for(int i=0; i<_itemsMonday.length; i++){
-          TimeTable e = _itemsMonday[i];
-          if(e.category == category){
-            int x = e.toTimeOfDay.hour*60+e.toTimeOfDay.minute;
-            int y = e.fromTimeOfDay.hour*60+e.fromTimeOfDay.minute;
-            totalTime+=(x-y);
-          }
-        }
-        break;
-      case "Tuesday":
-        for(int i=0; i<_itemsTuesday.length; i++){
-          TimeTable e = _itemsTuesday[i];
-          if(e.category == category){
-            int x = e.toTimeOfDay.hour*60+e.toTimeOfDay.minute;
-            int y = e.fromTimeOfDay.hour*60+e.fromTimeOfDay.minute;
-            totalTime+=(x-y);
-          }
-        }
-        break;
-      case "Wednesday":
-        for(int i=0; i<_itemsWednesday.length; i++){
-          TimeTable e = _itemsWednesday[i];
-          if(e.category == category){
-            int x = e.toTimeOfDay.hour*60+e.toTimeOfDay.minute;
-            int y = e.fromTimeOfDay.hour*60+e.fromTimeOfDay.minute;
-            totalTime+=(x-y);
-          }
-        }
-        break;
-      case "Thursday":
-        for(int i=0; i<_itemsThursday.length; i++){
-          TimeTable e = _itemsThursday[i];
-          if(e.category == category){
-            int x = e.toTimeOfDay.hour*60+e.toTimeOfDay.minute;
-            int y = e.fromTimeOfDay.hour*60+e.fromTimeOfDay.minute;
-            totalTime+=(x-y);
-          }
-        }
-        break;
-      case "Friday":
-        for(int i=0; i<_itemsFriday.length; i++){
-          TimeTable e = _itemsFriday[i];
-          if(e.category == category){
-            int x = e.toTimeOfDay.hour*60+e.toTimeOfDay.minute;
-            int y = e.fromTimeOfDay.hour*60+e.fromTimeOfDay.minute;
-            totalTime+=(x-y);
-          }
-        }
-        break;
-      case "Saturday":
-        for(int i=0; i<_itemsSaturday.length; i++){
-          TimeTable e = _itemsSaturday[i];
-          if(e.category == category){
-            int x = e.toTimeOfDay.hour*60+e.toTimeOfDay.minute;
-            int y = e.fromTimeOfDay.hour*60+e.fromTimeOfDay.minute;
-            totalTime+=(x-y);
-          }
-        }
-        break;
-      default:
-        for(int i=0; i<_itemsSunday.length; i++){
-          TimeTable e = _itemsSunday[i];
-          if(e.category == category){
-            int x = e.toTimeOfDay.hour*60+e.toTimeOfDay.minute;
-            int y = e.fromTimeOfDay.hour*60+e.fromTimeOfDay.minute;
-            totalTime+=(x-y);
-          }
-        }
-        break;
+
+    List<TimeTable> dayList = getTimetableList(day);
+
+    for(int i=0; i<dayList.length; i++){
+      TimeTable e = dayList[i];
+      if(e.category == category){
+        int x = e.toTimeOfDay.hour*60+e.toTimeOfDay.minute;
+        int y = e.fromTimeOfDay.hour*60+e.fromTimeOfDay.minute;
+        totalTime+=(x-y);
+      }
     }
+
     return totalTime;
   }
 
   Future<void> fetchAndSetData() async {
-    for (int i = 0; i < 7; i++) {
-      switch (i) {
-        case 0:
-          final data = await TimetableDatabase.getData("Monday");
-          _itemsMonday = data
-              .map(
-                (tt) => TimeTable(
-                  title: tt["title"],
-                  description: tt["description"],
-                  id: tt["id"],
-                  fromTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["fromTime"] as String).hour,
-                      minute: DateTime.parse(tt["fromTime"] as String).minute),
-                  toTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["toTime"] as String).hour,
-                      minute: DateTime.parse(tt["toTime"] as String).minute),
-                  day: tt["day"],
-                  category: TypeCategory.values.elementAt(tt["category"]),
-                ),
-              )
-              .toList();
+    List<String> li = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ];
 
-          queueMon.clear();
-          for (int j = 0; j < _itemsMonday.length; j++) {
-            queueMon.add(_itemsMonday[j]);
-          }
+    li.forEach((day) async {
+      final data = await TimetableDatabase.getData(day);
+      List<TimeTable> tempList;
+      var tempQ = PriorityQueue<TimeTable>(
+              (a, b) => compareTime(a.fromTimeOfDay, b.fromTimeOfDay));
+      tempList = data
+          .map(
+            (tt) =>
+            TimeTable(
+              title: tt["title"],
+              description: tt["description"],
+              id: tt["id"],
+              fromTimeOfDay: TimeOfDay(
+                  hour: DateTime
+                      .parse(tt["fromTime"] as String)
+                      .hour,
+                  minute: DateTime
+                      .parse(tt["fromTime"] as String)
+                      .minute),
+              toTimeOfDay: TimeOfDay(
+                  hour: DateTime
+                      .parse(tt["toTime"] as String)
+                      .hour,
+                  minute: DateTime
+                      .parse(tt["toTime"] as String)
+                      .minute),
+              day: tt["day"],
+              category: TypeCategory.values.elementAt(tt["category"]),
+            ),
+      )
+          .toList();
 
-          _itemsMonday = queueMon.toList();
-          break;
-        case 1:
-          final data = await TimetableDatabase.getData("Tuesday");
-          _itemsTuesday = data
-              .map(
-                (tt) => TimeTable(
-                  title: tt["title"],
-                  description: tt["description"],
-                  id: tt["id"],
-                  fromTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["fromTime"] as String).hour,
-                      minute: DateTime.parse(tt["fromTime"] as String).minute),
-                  toTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["toTime"] as String).hour,
-                      minute: DateTime.parse(tt["toTime"] as String).minute),
-                  day: tt["day"],
-                  category: TypeCategory.values.elementAt(tt["category"]),
-                ),
-              )
-              .toList();
-
-          queueTue.clear();
-          for (int j = 0; j < _itemsTuesday.length; j++) {
-            queueTue.add(_itemsTuesday[j]);
-          }
-
-          _itemsTuesday = queueTue.toList();
-          break;
-        case 2:
-          final data = await TimetableDatabase.getData("Wednesday");
-          _itemsWednesday = data
-              .map(
-                (tt) => TimeTable(
-                  title: tt["title"],
-                  description: tt["description"],
-                  id: tt["id"],
-                  fromTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["fromTime"] as String).hour,
-                      minute: DateTime.parse(tt["fromTime"] as String).minute),
-                  toTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["toTime"] as String).hour,
-                      minute: DateTime.parse(tt["toTime"] as String).minute),
-                  day: tt["day"],
-                  category:TypeCategory.values.elementAt(tt["category"]),
-                ),
-              )
-              .toList();
-
-          queueWed.clear();
-          for (int j = 0; j < _itemsWednesday.length; j++) {
-            queueWed.add(_itemsWednesday[j]);
-          }
-
-          _itemsWednesday = queueWed.toList();
-          break;
-        case 3:
-          final data = await TimetableDatabase.getData("Thursday");
-          _itemsThursday = data
-              .map(
-                (tt) => TimeTable(
-                  title: tt["title"],
-                  description: tt["description"],
-                  id: tt["id"],
-                  fromTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["fromTime"] as String).hour,
-                      minute: DateTime.parse(tt["fromTime"] as String).minute),
-                  toTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["toTime"] as String).hour,
-                      minute: DateTime.parse(tt["toTime"] as String).minute),
-                  day: tt["day"],
-                  category: TypeCategory.values.elementAt(tt["category"]),
-                ),
-              )
-              .toList();
-
-          queueThr.clear();
-          for (int j = 0; j < _itemsThursday.length; j++) {
-            queueThr.add(_itemsThursday[j]);
-          }
-
-          _itemsThursday = queueThr.toList();
-          break;
-        case 4:
-          final data = await TimetableDatabase.getData("Friday");
-          _itemsFriday = data
-              .map(
-                (tt) => TimeTable(
-                  title: tt["title"],
-                  description: tt["description"],
-                  id: tt["id"],
-                  fromTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["fromTime"] as String).hour,
-                      minute: DateTime.parse(tt["fromTime"] as String).minute),
-                  toTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["toTime"] as String).hour,
-                      minute: DateTime.parse(tt["toTime"] as String).minute),
-                  day: tt["day"],
-                  category: TypeCategory.values.elementAt(tt["category"]),
-                ),
-              )
-              .toList();
-
-          queueFri.clear();
-          for (int j = 0; j < _itemsFriday.length; j++) {
-            queueFri.add(_itemsFriday[j]);
-          }
-
-          _itemsFriday = queueFri.toList();
-          break;
-        case 5:
-          final data = await TimetableDatabase.getData("Saturday");
-          _itemsSaturday = data
-              .map(
-                (tt) => TimeTable(
-                  title: tt["title"],
-                  description: tt["description"],
-                  id: tt["id"],
-                  fromTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["fromTime"] as String).hour,
-                      minute: DateTime.parse(tt["fromTime"] as String).minute),
-                  toTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["toTime"] as String).hour,
-                      minute: DateTime.parse(tt["toTime"] as String).minute),
-                  day: tt["day"],
-                  category: TypeCategory.values.elementAt(tt["category"]),
-                ),
-              )
-              .toList();
-
-          queueSat.clear();
-          for (int j = 0; j < _itemsSaturday.length; j++) {
-            queueSat.add(_itemsSaturday[j]);
-          }
-
-          _itemsSaturday = queueSat.toList();
-          break;
-        case 6:
-          final data = await TimetableDatabase.getData("Sunday");
-          _itemsSunday = data
-              .map(
-                (tt) => TimeTable(
-                  title: tt["title"],
-                  description: tt["description"],
-                  id: tt["id"],
-                  fromTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["fromTime"] as String).hour,
-                      minute: DateTime.parse(tt["fromTime"] as String).minute),
-                  toTimeOfDay: TimeOfDay(
-                      hour: DateTime.parse(tt["toTime"] as String).hour,
-                      minute: DateTime.parse(tt["toTime"] as String).minute),
-                  day: tt["day"],
-                  category: TypeCategory.values.elementAt(tt["category"]),
-                ),
-              )
-              .toList();
-
-          queueSun.clear();
-          for (int j = 0; j < _itemsSunday.length; j++) {
-            queueSun.add(_itemsSunday[j]);
-          }
-
-          _itemsSunday = queueSun.toList();
-          break;
+      tempQ.clear();
+      for (int j = 0; j < tempList.length; j++) {
+        tempQ.add(tempList[j]);
       }
-    }
+      tempList = tempQ.toList();
+      setTimetableList(day, tempList);
+      setTimetableQueue(day, tempQ);
+    });
+
+    await Future.delayed(Duration(seconds: 1));
+
   }
 }
 

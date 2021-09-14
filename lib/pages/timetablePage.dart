@@ -21,9 +21,6 @@ class _TimetablePageState extends State<TimetablePage>
     return prev.month != next.month;
   }
 
-  late AnimationController _animationController;
-  late Animation<double> _slideAnimation;
-
   bool isDayChangerOpen = false;
 
 
@@ -31,36 +28,26 @@ class _TimetablePageState extends State<TimetablePage>
 
 
   void changeDay(String day) {
+    print(day);
     setState(() {
       dayName = day;
     });
   }
 
-  void slideInOutDaySwitcher() {
-    if (isDayChangerOpen == false) {
-      _animationController.forward();
-    } else {
-      _animationController.reverse();
-    }
-    isDayChangerOpen = !isDayChangerOpen;
-  }
 
   @override
   void initState() {
     // TODO: implement initState
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _slideAnimation = Tween<double>(begin: -70.0, end: 0.0).animate(
-        CurvedAnimation(
-            parent: _animationController, curve: Curves.easeOutCubic));
-    _slideAnimation.addListener(() {
-      setState(() {});
-    });
     final now = DateTime.now();
     dayName = DateFormat("EEEE").format(now);
     super.initState();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final _timetable = Provider.of<TimeTableProvider>(context);

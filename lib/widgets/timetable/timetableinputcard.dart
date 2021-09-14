@@ -322,6 +322,9 @@ class _AddTimetablePopupCardState extends State<AddTimetablePopupCard> {
                                       if (value.length <= 2) {
                                         return "Title length must be 3";
                                       }
+                                      if (value.length >= 20) {
+                                        return "Title length must be under 20";
+                                      }
                                       return null;
                                     },
                                   ),
@@ -337,7 +340,7 @@ class _AddTimetablePopupCardState extends State<AddTimetablePopupCard> {
                                         labelStyle:
                                             TextStyle(color: Colors.black38),
                                         hintText:
-                                            "Enter description (Not necessary)",
+                                            "Enter description",
                                         errorStyle: TextStyle(
                                           color: Colors.black54,
                                           fontStyle: FontStyle.italic,

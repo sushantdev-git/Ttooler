@@ -53,7 +53,7 @@ class TimetableGlance extends StatelessWidget {
           if (_timetable.length > 3)
             TimetableTimelineBuilder(day: day, items: _timetable.sublist(0,3), leftPadding: 0, rightPadding: 0, where: "Glance",),
           if(_timetable.length != 0)TextButton(onPressed: (){
-            Navigator.of(context).push(CustomPageRouteBuilder(enterPage: TimetablePage(), exitPage: HomePage()));
+            Navigator.of(context).push(CustomPageRouteBuilder(enterPage: TimetablePage()));
           }, child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

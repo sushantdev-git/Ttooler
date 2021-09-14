@@ -2,11 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:ttooler/konstant/konstant.dart';
-import 'package:ttooler/modals/reminderProvier.dart';
-import 'package:ttooler/modals/timetableProvider.dart';
-import 'package:ttooler/modals/todoProvider.dart';
 import 'package:ttooler/pageRoutebuilder/customPageRouteBuilder.dart';
 import 'package:ttooler/pages/aboutPage.dart';
 import 'package:ttooler/pages/bookshelfPage.dart';
@@ -29,23 +25,23 @@ class HomePage extends StatefulWidget {
     switch (name) {
       case PageName.Todo:
         Navigator.of(context).push(
-            CustomPageRouteBuilder(enterPage: TodoPage(), exitPage: this));
+            CustomPageRouteBuilder(enterPage: TodoPage()));
         break;
       case PageName.Reminder:
         Navigator.of(context).push(
-            CustomPageRouteBuilder(enterPage: ReminderPage(), exitPage: this));
+            CustomPageRouteBuilder(enterPage: ReminderPage()));
         break;
       case PageName.TimeTable:
         Navigator.of(context).push(
-            CustomPageRouteBuilder(enterPage: TimetablePage(), exitPage: this));
+            CustomPageRouteBuilder(enterPage: TimetablePage()));
         break;
       case PageName.BookShelf:
         Navigator.of(context).push(
-            CustomPageRouteBuilder(enterPage: BookshelfPage(), exitPage: this));
+            CustomPageRouteBuilder(enterPage: BookshelfPage()));
         break;
       case PageName.About:
         Navigator.of(context).push(
-            CustomPageRouteBuilder(enterPage: AboutPage(), exitPage: this));
+            CustomPageRouteBuilder(enterPage: AboutPage()));
         break;
       default:
         break;
@@ -85,17 +81,6 @@ class _HomePageState extends State<HomePage> {
       });
     }
 
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    Timer.periodic(Duration(minutes: 5), (timer) {
-      setState(() {
-
-      });
-    });
-    super.initState();
   }
 
   @override

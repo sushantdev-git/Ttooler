@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 class CustomPageRouteBuilder extends PageRouteBuilder {
   final Widget enterPage;
-  final Widget exitPage;
 
-  CustomPageRouteBuilder({required this.enterPage, required this.exitPage})
+  CustomPageRouteBuilder({required this.enterPage})
       : super(
           transitionDuration: Duration(milliseconds: 350),
           pageBuilder: (context, animation, secondAnimation) => enterPage,

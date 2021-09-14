@@ -45,7 +45,7 @@ class ReminderGlance extends StatelessWidget {
             TimelineBuilder(
                 items: _reminder.sublist(0, 3), isSameMonth: isSameMonth, leftPadding: 0, rightPadding: 0, where: "glance"),
           if(_reminder.length != 0)TextButton(onPressed: (){
-            Navigator.of(context).push(CustomPageRouteBuilder(enterPage: ReminderPage(), exitPage: HomePage()));
+            Navigator.of(context).push(CustomPageRouteBuilder(enterPage: ReminderPage(),));
           }, child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

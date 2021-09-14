@@ -45,7 +45,7 @@ class TodoGlance extends StatelessWidget {
               SizedBox(height: 10,),
               ...getTodo(_todos.items, _todos),
               TextButton(onPressed: (){
-                Navigator.of(context).push(CustomPageRouteBuilder(enterPage: TodoPage(), exitPage: HomePage()));
+                Navigator.of(context).push(CustomPageRouteBuilder(enterPage: TodoPage()));
               }, child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -62,7 +62,7 @@ class TodoGlance extends StatelessWidget {
             height: MediaQuery.of(context).size.height/2,
             child: Center(
               child: TextButton(onPressed: (){
-                Navigator.of(context).push(CustomPageRouteBuilder(enterPage: TodoPage(), exitPage: this));
+                Navigator.of(context).push(CustomPageRouteBuilder(enterPage: TodoPage()));
               }, child: Text("Your Todo list seems empty \n add some.. 😒", style: TextStyle(
                 fontSize: 20,
               ), textAlign: TextAlign.center,),),
