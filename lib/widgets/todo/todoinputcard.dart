@@ -147,13 +147,13 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                                     cursorColor: Theme.of(context).canvasColor,
                                     maxLines: null,
                                     onChanged: (value) {
-                                      title = value;
+                                      title = value.trim();
                                     },
                                     validator: (value) {
                                       if (value == null) {
                                         return "Enter Title";
                                       }
-                                      if (value.length <= 3) {
+                                      if (value.trim().length <= 3) {
                                         return "Title length must be 3";
                                       }
                                       return null;
@@ -177,13 +177,13 @@ class _AddTodoPopupCardState extends State<AddTodoPopupCard> {
                                     cursorColor: Theme.of(context).canvasColor,
                                     maxLines: null,
                                     onChanged: (value) {
-                                      description = value;
+                                      description = value.trim();
                                     },
                                     validator: (value) {
                                       if (value == null) {
                                         return "Enter Description";
                                       }
-                                      if (value.length <= 8) {
+                                      if (value.trim().length <= 8) {
                                         return "Description length must be 8";
                                       }
                                       return null;

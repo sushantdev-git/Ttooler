@@ -418,7 +418,7 @@ class TimeTableProvider extends ChangeNotifier {
       setTimetableQueue(day, tempQ);
     });
 
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(milliseconds: 300));
 
   }
 }

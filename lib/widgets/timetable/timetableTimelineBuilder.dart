@@ -27,6 +27,8 @@ class TimetableTimelineBuilder extends StatelessWidget {
     return false;
   }
 
+
+
   bool isCurrentSchedule(TimeOfDay fromTime, TimeOfDay toTime){
     final now = DateTime.now();
     int x = now.hour*60+now.minute;
@@ -89,13 +91,11 @@ class TimetableTimelineBuilder extends StatelessWidget {
                   "Upcoming",
                   style: TextStyle(fontSize: 17, color: Colors.white60,fontWeight: FontWeight.w100,),
                 ),
-
-                //if index == 0 then show the month name
-                // if (index == 0)
-                //   Text(
-                //     "${items[index].timeOfDay}",
-                //     style: TextStyle(fontSize: 12, color: Colors.grey),
-                //   ),
+                if(index == 0 && isDayRepeat(TimeOfDay.now(),items[0].toTimeOfDay))Text("Next $day", style: TextStyle(
+                  color: Colors.white60,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w100,
+                ),),
 
                 //if current reminder month is not equal to next reminder month then we will show the month name
                 if (index != 0 &&

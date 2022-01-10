@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -38,7 +38,7 @@ class Notifications {
         "channel description",
         importance: Importance.max,
         priority: Priority.high,
-        // sound: RawResourceAndroidNotificationSound('notf'),
+        sound: RawResourceAndroidNotificationSound('notf'),
       ),
     );
   }
@@ -85,6 +85,21 @@ class Notifications {
 
     return scheduleDate.isBefore(now) ? scheduleDate.add(Duration(days: 1)) : scheduleDate;
   }
+
+
+  Future<void> _repeatNotification() async {
+
+    await _notifications.periodicallyShow(
+        0,
+        'repeating title',
+        'repeating body',
+        RepeatInterval.everyMinute,
+        await _notificationDetails(),
+        androidAllowWhileIdle: true
+    );
+  }
+
+
 
 
   static tz.TZDateTime _scheduleWeekly (Time time, int weekDay){

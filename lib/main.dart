@@ -68,6 +68,9 @@ class MyApp extends StatelessWidget {
           ).apply(
             bodyColor: Colors.white,
           ),
+          appBarTheme: AppBarTheme(
+            backgroundColor:Color(0xff181920),
+          ),
           outlinedButtonTheme: OutlinedButtonThemeData(
             style: OutlinedButton.styleFrom(
               primary: Colors.white,

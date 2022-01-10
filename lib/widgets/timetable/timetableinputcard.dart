@@ -133,7 +133,6 @@ class _AddTimetablePopupCardState extends State<AddTimetablePopupCard> {
     if (pickedTime == null) {
       return;
     }
-
     if (whichTime == "From") {
       fromTime = pickedTime;
       formatTime(fromTime, "From");
@@ -313,16 +312,16 @@ class _AddTimetablePopupCardState extends State<AddTimetablePopupCard> {
                                     cursorColor: Theme.of(context).canvasColor,
                                     maxLines: null,
                                     onChanged: (value) {
-                                      title = value;
+                                      title = value.trim();
                                     },
                                     validator: (value) {
                                       if (value == null) {
                                         return "Enter Title";
                                       }
-                                      if (value.length <= 2) {
+                                      if (value.trim().length <= 2) {
                                         return "Title length must be 3";
                                       }
-                                      if (value.length >= 20) {
+                                      if (value.trim().length >= 20) {
                                         return "Title length must be under 20";
                                       }
                                       return null;
@@ -348,7 +347,7 @@ class _AddTimetablePopupCardState extends State<AddTimetablePopupCard> {
                                     cursorColor: Theme.of(context).canvasColor,
                                     maxLines: null,
                                     onChanged: (value) {
-                                      description = value;
+                                      description = value.trim();
                                     },
                                     validator: (value) {
                                       if (value == null) {

@@ -215,16 +215,16 @@ class _AddReminderPopupCardState extends State<AddReminderPopupCard> {
                                 cursorColor: Theme.of(context).canvasColor,
                                 maxLines: null,
                                 onChanged: (value) {
-                                  title = value;
+                                  title = value.trim();
                                 },
                                 validator: (value) {
                                   if (value == null) {
                                     return "Enter Title";
                                   }
-                                  if (value.length <= 3) {
+                                  if (value.trim().length <= 3) {
                                     return "Title length must be 3";
                                   }
-                                  if (value.length >= 20) {
+                                  if (value.trim().length >= 20) {
                                     return "Title length must be under 20";
                                   }
                                   return null;
